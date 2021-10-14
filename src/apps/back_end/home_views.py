@@ -49,12 +49,21 @@ class LoginCheck(BaseView):
 
     validator = LoginValidator
 
+    def get_name(self, password):
+        users = {
+            'waitan405-1': 'one',
+            'waitan405-2': 'leo',
+            'waitan405-3': 'ike',
+        }
+        if password in users:
+            return users[password]
+
     def post(self, *args, **kwargs):
         request_data = self.get_request_data(kwargs)
         password = request_data['password']
-        name = request_data['name']
 
-        if password == 'waitan405':
+        name = self.get_name(password)
+        if name:
             token = uuid.uuid4().hex
 
             redis_client.set(name, token)
@@ -63,5 +72,6 @@ class LoginCheck(BaseView):
             return jsonify({
                 'login': True,
                 'token': token,
+                'name': name,
             })
         return jsonify({'login': False})
