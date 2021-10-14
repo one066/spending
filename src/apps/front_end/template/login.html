@@ -37,13 +37,6 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                             <select class='form-control show-tick ms select2' id='name' title='主题'>
-                                                <option value='kk'>k</option>
-                                                <option value='pp'>p</option>
-                                                <option value='qq'>q</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <input type="password" class="form-control form-control-user" id="password" name="password"
                                                  placeholder="密码">
                                         </div>
@@ -74,16 +67,15 @@
 
     <script>
         function checklogin() {
-            var name = $("#name").val();
             var pw = $('#password').val();
-            if (!name || !pw) {
+            if (!pw) {
                 alert('密码不能为空')
             }
             else if(pw.length < 8 ) {
                 alert('密码不能低于8位')
             }
             else {
-                var Obj = {'password':pw, 'name': name};
+                var Obj = {'password':pw};
                 $.ajax({
                 url:"{{ url_for('home_view.LoginCheck') }}",
 
@@ -99,7 +91,7 @@
                         $.cookie("token", null, {expires: -1});
                         $.cookie("name", null, {expires: -1});
                         document.cookie = "token=" + data.valueOf()['token'];
-                        document.cookie = "name=" + name;
+                        document.cookie = "name=" + data.valueOf()['name'];
                         window.location.href = "{{ url_for('front_end_views.home') }}";
                     }
                 },

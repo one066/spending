@@ -8,5 +8,4 @@ class AddSpendingValidator(Schema):
 
 
 class LoginValidator(Schema):
-    name = fields.Str(required=True)
     password = fields.Str(required=True)
