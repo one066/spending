@@ -70,7 +70,7 @@
     <script src="{{ url_for('front_end_views.static',filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('front_end_views.static',filename='js/jquery.easing.min.js') }}"></script>
     <script src="{{ url_for('front_end_views.static',filename='js/one.min.js') }}"></script>
-        <script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
 
     <script>
         function checklogin() {
@@ -86,20 +86,21 @@
                 var Obj = {'password':pw, 'name': name};
                 $.ajax({
                 url:"{{ url_for('home_view.LoginCheck') }}",
+
                 type:'POST',
                 data:JSON.stringify(Obj),
                 contentType:'application/json',
                 success:function (data) {
-                    console.log(data.valueOf())
+                    console.log(data.valueOf());
                     if (!data.valueOf()['login']) {
                         alert("密码错误！！");
                     }
                     else {
-                        $.cookie("token",null,{expires:-1});
-                        $.cookie("name",null,{expires:-1});
-                        document.cookie = "token="+data.valueOf()['token'];
-                        document.cookie = "name="+name;
-                        window.location.href="{{ url_for('front_end_views.home') }}";
+                        $.cookie("token", null, {expires: -1});
+                        $.cookie("name", null, {expires: -1});
+                        document.cookie = "token=" + data.valueOf()['token'];
+                        document.cookie = "name=" + name;
+                        window.location.href = "{{ url_for('front_end_views.home') }}";
                     }
                 },
                 error:function(e){
