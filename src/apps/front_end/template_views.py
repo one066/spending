@@ -1,5 +1,5 @@
 from flask import (Blueprint, redirect, render_template,
-                   url_for)
+                   url_for, make_response, request)
 
 from extension.flask import class_route
 from extension.flask.base_views import BaseView
@@ -12,16 +12,20 @@ front_end_views = Blueprint('front_end_views',
                             static_folder='static')
 
 
-@class_route(front_end_views, '/home')
-class Home(BaseView):
+@class_route(front_end_views, '/login')
+def login():
+    return render_template('login.html')
 
-    def get(self):
-        return render_template('home.html')
+
+@class_route(front_end_views, '/home')
+def home():
+    print(request.cookies)
+    return render_template('home.html')
 
 
 @front_end_views.route('/', methods=['GET'])
 def init():
-    return redirect(url_for('front_end_views.Home'))
+    return redirect(url_for('front_end_views.Login'))
 
 
 @front_end_views.app_errorhandler(404)

@@ -3,7 +3,7 @@ from extension.mysql_client import db
 
 class RecordSpending(db.Model):
     __tablename__ = 'record_spending'
-    id = db.Column(db.String(32), nullable=True)
+    id = db.Column(db.String(32), nullable=True, primary_key=True)
 
     title = db.Column(db.String(100), nullable=True)
     money = db.Column(db.Float(), nullable=True)

@@ -5,10 +5,6 @@ from flask.views import MethodView
 from marshmallow import ValidationError
 
 from extension.flask.exceptions import TokenFailed
-from extension.redis_client import redis_client
-from small_broken_station_engine.model.password_crypto import PasswordCrypto
-from small_broken_station_engine.model.password_save import PasswordSave
-
 
 def ok_response(result):
     new_body = {'ok': True, 'result': result}
@@ -29,25 +25,6 @@ def failed_response(error_type, error_message):
     return jsonify(body)
 
 
-def v1(view):
-    @wraps(view)
-    def decorator(*args, **kwargs):
-        cookie = request.cookies
-        token = cookie['token']
-        user_id = cookie['user_id']
-        time = cookie['time']
-
-        key = redis_client.get(f'{user_id}:{token}')
-        if not key:
-            raise TokenFailed
-        if key.decode() != time:
-            raise TokenFailed
-
-        return view(*args, **kwargs)
-
-    return decorator
-
-
 class BaseView(MethodView):
     validator = None
 
@@ -57,20 +34,6 @@ class BaseView(MethodView):
         deserializer = self.validator()
         request_data = deserializer.load(request_data)
         return request_data
-
-    @staticmethod
-    def encrypt(keys, text):
-        key = PasswordSave().get_keys(keys)
-        text = PasswordCrypto().rsa_encrypt(text, key[0])
-        token = PasswordSave().random_key(
-            50) + text + PasswordSave().random_key(50)
-        return token
-
-    @staticmethod
-    def encrypt_v1(keys, text):
-        key = PasswordSave().get_keys(keys)
-        text = PasswordCrypto().rsa_encrypt(text, key[0])
-        return text
 
     @classmethod
     def parse_json(cls):

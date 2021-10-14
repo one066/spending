@@ -12,3 +12,4 @@ PyMySQL==1.0.2
 SQLAlchemy==1.4.25
 Werkzeug==2.0.2
 gunicorn
+redis
