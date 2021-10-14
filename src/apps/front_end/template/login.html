@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>one - Login</title>
+
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/all.min.css') }}>
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/googleapis.css') }} >
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/bootstrop.min.css') }} >
+
+</head>
+
+<body class="bg-gradient-primary">
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">欢迎使用!</h1>
+                                    </div>
+                                    <form class="user">
+
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" id="password" name="password"
+                                                 placeholder="密码">
+                                        </div>
+                                        <button type="button" onclick="checklogin()" class="btn btn-primary btn-user btn-block">
+                                            登陆
+                                        </button>
+                                    
+                                    </form>
+                                    <hr>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.easing.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/one.min.js') }}"></script>
+
+    <script>
+        function checklogin() {
+            var pw = $('#password').val();
+            if (!pw) {
+                alert('密码不能为空')
+            }
+            else if(pw.length < 8 ) {
+                alert('密码不能低于8位')
+            }
+            else {
+                var Obj = {'password':pw};
+                $.ajax({
+                url:"{{ url_for('user.LoginCheck') }}",
+                type:'POST',
+                data:JSON.stringify(Obj),
+                contentType:'application/json',
+                success:function (data) {
+                    console.log(data.valueOf())
+                    if (!data.valueOf()['result']['login']) {
+                        alert("密码错误！！");
+                    }
+                    else {
+
+                    }
+                },
+                error:function(e){
+                    alert("密码错误！！");
+                }
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>

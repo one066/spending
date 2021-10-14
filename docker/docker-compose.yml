@@ -9,9 +9,14 @@ services:
 #    ports:
 #      - "8008:8008"
     links:
+      - redis
       - mysql
     environment:
       STAGE: development
+
+  redis:
+    image: "redis:alpine"
+    restart: always
 
   nginx:
     image: "nginx"
