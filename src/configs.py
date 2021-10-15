@@ -5,7 +5,7 @@ from datetime import timedelta
 class initConfig(object):
     # INIT
     SECRET_KEY = os.urandom(24)
-    # DEBUG = True
+    DEBUG = True
     # SEND_FILE_MAX_AGE_DEFAULT = timedelta(seconds=1)   # 强制取消缓存
     PERMANENT_SESSION_LIFETIME = timedelta(seconds=70)
     KEY = "x9uo3L1xDDcF58Pt"

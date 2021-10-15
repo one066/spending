@@ -6,15 +6,17 @@ from flask import Blueprint, jsonify
 from apps.back_end.models import RecordSpending
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
-from extension.flask.base_views import BaseView, ok_response
+from extension.flask.api import ok_response, v1
+from extension.flask.base_views import BaseView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
 
 home_view = Blueprint('home_view',
-                 __name__,
-                 url_prefix='/spending/v1/spending')
+                      __name__,
+                      url_prefix='/spending/v1/spending')
 
 
+@v1
 @class_route(home_view, '/add_spending')
 class AddTodo(BaseView):
     validator = AddSpendingValidator
@@ -36,9 +38,9 @@ class AddTodo(BaseView):
         return ok_response('add success')
 
 
+@v1
 @class_route(home_view, '/show_todo')
 class ShowTodo(BaseView):
-
     def get(self, *args, **kwargs):
         _record_spending = RecordSpending.query.all()
         return jsonify(_record_spending)
@@ -46,10 +48,10 @@ class ShowTodo(BaseView):
 
 @class_route(home_view, '/login_check')
 class LoginCheck(BaseView):
-
     validator = LoginValidator
 
-    def get_name(self, password):
+    @staticmethod
+    def get_name(password):
         users = {
             'waitan405-1': 'one',
             'waitan405-2': 'leo',
