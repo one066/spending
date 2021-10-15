@@ -6,7 +6,6 @@ from extension.mail_client import mail
 
 
 class OneEmail:
-
     def send_password(self, user_mail, password_key, password_value):
         try:
             mail.connect()

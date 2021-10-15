@@ -1,7 +1,6 @@
-from flask import (Blueprint, redirect, render_template,
-                   url_for, request)
+from flask import Blueprint, redirect, render_template, url_for
 
-from extension.flask import class_route
+from extension.flask.api import v1
 
 front_end_views = Blueprint('front_end_views',
                             __name__,
@@ -11,14 +10,14 @@ front_end_views = Blueprint('front_end_views',
                             static_folder='static')
 
 
-@class_route(front_end_views, '/login')
+@front_end_views.route('/login', methods=['GET'])
 def login():
     return render_template('login.html')
 
 
-@class_route(front_end_views, '/home')
+@front_end_views.route('/home', methods=['GET'])
+@v1
 def home():
-    print(request.cookies)
     return render_template('home.html')
 
 

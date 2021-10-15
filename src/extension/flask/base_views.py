@@ -1,28 +1,9 @@
-from functools import wraps
-
-from flask import jsonify, request
+from flask import request
 from flask.views import MethodView
 from marshmallow import ValidationError
 
+from extension.flask.api import failed_response, redirect_login
 from extension.flask.exceptions import TokenFailed
-
-def ok_response(result):
-    new_body = {'ok': True, 'result': result}
-    return jsonify(new_body)
-
-
-def redirect_login():
-    new_body = {'login': True}
-    return jsonify(new_body)
-
-
-def failed_response(error_type, error_message):
-    body = {
-        'ok': False,
-        'error_type': error_type,
-        'error_message': error_message,
-    }
-    return jsonify(body)
 
 
 class BaseView(MethodView):
