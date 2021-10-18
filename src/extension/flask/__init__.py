@@ -1,6 +1,4 @@
-from functools import wraps
-
-from flask import Blueprint, g, request
+from flask import Blueprint
 from flask.views import MethodViewType
 
 

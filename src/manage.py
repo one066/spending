@@ -2,6 +2,7 @@ import click
 
 from apps.base import create_app
 from extension.mysql_client import db
+from apps.back_end.models import RecordSpending
 
 app = create_app()
 

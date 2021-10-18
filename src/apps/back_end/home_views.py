@@ -1,7 +1,8 @@
 import datetime
 import uuid
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request, make_response
+from flask_cors import CORS
 
 from apps.back_end.models import RecordSpending
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
@@ -13,15 +14,21 @@ from extension.redis_client import redis_client
 
 home_view = Blueprint('home_view',
                       __name__,
-                      url_prefix='/spending/v1/spending')
+                      url_prefix='/v1/spending')
 
+
+CORS(home_view)
 
 @v1
 @class_route(home_view, '/add_spending')
-class AddTodo(BaseView):
+# @v1
+class AddSpending(BaseView):
     validator = AddSpendingValidator
 
     def post(self, *args, **kwargs):
+        cookie = request.cookies
+        print(cookie)
+
         request_data = self.get_request_data(kwargs)
         spending_id = uuid.uuid4().hex
         start_time = datetime.datetime.now().isoformat()
@@ -30,12 +37,16 @@ class AddTodo(BaseView):
             id=spending_id,
             start_time=start_time,
             title=request_data['title'],
-            money=request_data['money'],
-            people=request_data['people'],
+            price=request_data['price'],
+            people='xx',
         )
-        db.session.add(_record_spending)
-        db.session.commit()
-        return ok_response('add success')
+
+        # db.session.add(_record_spending)
+        # db.session.commit()
+        response = make_response(jsonify({'ok': True, 'result': 'add success'}))
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Origin'] = "*"
+        return response
 
 
 @v1
@@ -63,7 +74,6 @@ class LoginCheck(BaseView):
     def post(self, *args, **kwargs):
         request_data = self.get_request_data(kwargs)
         password = request_data['password']
-
         name = self.get_name(password)
         if name:
             token = uuid.uuid4().hex
