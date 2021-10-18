@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>one - home</title>
+
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/all.min.css') }}>
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/googleapis.css') }} >
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/bootstrop.min.css') }} >
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/dataTables.bootstrap4.min.css') }} >
+
+</head>
+
+<body class="bg-gradient-primary">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary" style="font-size: 25px;">开支</h6>
+            </div>
+                                <div class="card-body">
+                <div class="table-responsive">
+
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>who</th>
+                                    <th>title</th>
+                                    <th>price</th>
+                                    <th>start_time</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+{#                                {% for i in get_data() %}#}
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+{#                                {% endfor %}#}
+                            </tbody>
+                        </table>
+
+                </div>
+
+            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.easing.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/one.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script>
+        function get_spending(){
+            $.ajax({
+                url: "{{ url_for('home_view.ShowSpending') }}",
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+                if (data.valueOf()['redirect_login']) {
+                    alert('重新登录');
+                    window.location.href = "{{ url_for('front_end_views.login') }}";
+                } else {
+                    return data.valueOf()['result']
+                }
+                },
+                error: function (e) {
+                    alert("加载失败！！");
+                }
+            });
+        }
+
+        {#console.log(get_spending());#}
+        $(document).ready(function() {
+          $('#dataTable').DataTable({
+              ajax: "{{ url_for('home_view.ShowSpending') }}"
+
+          });
+        });
+    </script>
+</body>
+</html>

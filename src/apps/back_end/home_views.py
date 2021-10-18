@@ -7,27 +7,22 @@ from flask_cors import CORS
 from apps.back_end.models import RecordSpending
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
-from extension.flask.api import ok_response, v1
+from extension.flask.api import ok_response, v1, login_check
 from extension.flask.base_views import BaseView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
 
 home_view = Blueprint('home_view',
                       __name__,
-                      url_prefix='/v1/spending')
+                      url_prefix='/v1/service')
 
 
-CORS(home_view)
-
-@v1
 @class_route(home_view, '/add_spending')
-# @v1
 class AddSpending(BaseView):
     validator = AddSpendingValidator
 
     def post(self, *args, **kwargs):
-        cookie = request.cookies
-        print(cookie)
+        login_check()
 
         request_data = self.get_request_data(kwargs)
         spending_id = uuid.uuid4().hex
@@ -38,23 +33,23 @@ class AddSpending(BaseView):
             start_time=start_time,
             title=request_data['title'],
             price=request_data['price'],
-            people='xx',
+            people=self.get_name(),
         )
 
-        # db.session.add(_record_spending)
-        # db.session.commit()
-        response = make_response(jsonify({'ok': True, 'result': 'add success'}))
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        response.headers['Access-Control-Allow-Origin'] = "*"
-        return response
+        db.session.add(_record_spending)
+        db.session.commit()
+        return ok_response('add success')
 
 
-@v1
-@class_route(home_view, '/show_todo')
-class ShowTodo(BaseView):
+@class_route(home_view, '/show_spending')
+class ShowSpending(BaseView):
+
     def get(self, *args, **kwargs):
+        login_check()
+
         _record_spending = RecordSpending.query.all()
-        return jsonify(_record_spending)
+        print([record.show() for record in _record_spending])
+        return ok_response([record.show() for record in _record_spending])
 
 
 @class_route(home_view, '/login_check')
@@ -77,7 +72,6 @@ class LoginCheck(BaseView):
         name = self.get_name(password)
         if name:
             token = uuid.uuid4().hex
-
             redis_client.set(name, token)
             redis_client.expire(name, 60 * 60 * 24)
 

@@ -80,15 +80,14 @@
                 data: JSON.stringify(Obj),
                 contentType: 'application/json',
                 success: function (data) {
-                    console.log(data.valueOf());
                     if (!data.valueOf()['login']) {
                         alert("密码错误！！");
                         return
                     } else {
-                        $.cookie("token", null, {expires: -1});
-                        $.cookie("name", null, {expires: -1});
-                        $.cookie('name', data.valueOf()['name'], {expires: 1});
-                        $.cookie('token', data.valueOf()['token'], {expires: 1});
+                        $.removeCookie('token',{ path: '/'});
+                        $.removeCookie('name',{ path: '/'});
+                        $.cookie('name', data.valueOf()['name'], {expires: 1, path: '/'});
+                        $.cookie('token', data.valueOf()['token'], {expires: 1, path: '/'});
                         window.location.href = "{{ url_for('front_end_views.home') }}";
                     }
                 },

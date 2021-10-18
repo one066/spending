@@ -22,6 +22,11 @@ class BaseView(MethodView):
         """
         return request.json or {}
 
+    @classmethod
+    def get_name(cls):
+        cookie = request.cookies
+        return cookie.get('name', 'x')
+
     def dispatch_request(self, *args, **kwargs):
         try:
             return super(BaseView, self).dispatch_request(*args, **kwargs)

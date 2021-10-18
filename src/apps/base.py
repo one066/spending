@@ -11,7 +11,6 @@ from extension.mysql_client import db
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, supports_credentials=True)
 
     # 加载配置
     app.config.from_object(initConfig)
