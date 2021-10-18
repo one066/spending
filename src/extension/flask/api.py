@@ -41,8 +41,8 @@ def v1(view):
     @wraps(view)
     def decorator(*args, **kwargs):
         cookie = request.cookies
-        token = cookie.get('token', 'one')
-        name = cookie.get('name', 'one')
+        token = cookie.get('token', 'x')
+        name = cookie.get('name', 'x')
         key = redis_client.get(name)
 
         if not token_check(key, token):

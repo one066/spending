@@ -29,21 +29,20 @@
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">欢迎使用!</h1>
                                 </div>
-                                <form class="user" >
+                                <form class="user" onSubmit="return false;">
                                     <div class="form-group">
                                         <input type="password" class="form-control form-control-user" id="password"
                                                name="password"
                                                placeholder="密码">
                                     </div>
-                                    <button type="button" onclick="checklogin()" class="btn btn-primary btn-user btn-block">
-                                        登陆
-                                    </button>
+                                    <div class="form-group">
+                                        <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block" value="登陆">
+                                    </div>
 
                                 </form>
                                 <hr>
@@ -68,14 +67,6 @@
 
 <script>
 
-    document.onkeydown = function (e) { // 回车提交表单
-        var theEvent = window.event || e;
-        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
-        if (code == 13) {
-            checklogin();
-        }
-    }
-
     function checklogin() {
         var pw = $('#password').val();
         if (!pw) {
@@ -84,9 +75,9 @@
             alert('密码不能低于8位')
         } else {
             var Obj = {'password': pw};
+            console.log(Obj)
             $.ajax({
                 url: "{{ url_for('home_view.LoginCheck') }}",
-
                 type: 'POST',
                 data: JSON.stringify(Obj),
                 contentType: 'application/json',
