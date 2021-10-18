@@ -21,6 +21,12 @@ def home():
     return render_template('home.html')
 
 
+@front_end_views.route('/show', methods=['GET'])
+# @v1
+def show():
+    return render_template('show.html')
+
+
 @front_end_views.route('/', methods=['GET'])
 def init():
     return redirect(url_for('front_end_views.login'))

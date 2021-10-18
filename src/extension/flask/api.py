@@ -25,7 +25,12 @@ def failed_response(error_type, error_message):
     return jsonify(body)
 
 
-def token_check(key, token):
+def token_check():
+    cookie = request.cookies
+    token = cookie.get('token', 'x')
+    name = cookie.get('name', 'y')
+    key = redis_client.get(name)
+
     if not key:
         return False
     if key.decode() != token:
@@ -40,17 +45,16 @@ def v1(view):
     """
     @wraps(view)
     def decorator(*args, **kwargs):
-        cookie = request.cookies
-        token = cookie.get('token', 'x')
-        name = cookie.get('name', 'x')
-        key = redis_client.get(name)
-
-        if not token_check(key, token):
+        if not token_check():
             if isinstance(view, MethodViewType):
                 raise TokenFailed
             else:
                 return redirect(url_for('front_end_views.login'))
-
         return view(*args, **kwargs)
 
     return decorator
+
+
+def login_check():
+    if not token_check():
+        raise TokenFailed
