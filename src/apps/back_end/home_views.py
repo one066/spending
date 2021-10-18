@@ -16,8 +16,10 @@ home_view = Blueprint('home_view',
                       __name__,
                       url_prefix='/v1/spending')
 
+
 CORS(home_view)
 
+@v1
 @class_route(home_view, '/add_spending')
 # @v1
 class AddSpending(BaseView):
@@ -38,12 +40,14 @@ class AddSpending(BaseView):
             price=request_data['price'],
             people='xx',
         )
+
         # db.session.add(_record_spending)
         # db.session.commit()
         response = make_response(jsonify({'ok': True, 'result': 'add success'}))
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers['Access-Control-Allow-Origin'] = "*"
         return response
+
 
 @v1
 @class_route(home_view, '/show_todo')

@@ -66,7 +66,6 @@
 <script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
 
 <script>
-
     function checklogin() {
         var pw = $('#password').val();
         if (!pw) {
@@ -75,7 +74,6 @@
             alert('密码不能低于8位')
         } else {
             var Obj = {'password': pw};
-            console.log(Obj)
             $.ajax({
                 url: "{{ url_for('home_view.LoginCheck') }}",
                 type: 'POST',
