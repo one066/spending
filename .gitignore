@@ -110,3 +110,7 @@ venv.bak/
 .idea/
 .vim/
 .code/
+
+
+# mysql data
+mysql/
