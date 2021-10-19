@@ -59,7 +59,7 @@ class LoginCheck(BaseView):
     def get_name(password):
         users = {
             'miss123456': 'one',
-            'waitan405': 'leo',
+            'rng3:0dk': 'leo',
             'zxcv': 'ike',
         }
         if password in users:
