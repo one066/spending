@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for, request
+from flask import Blueprint, redirect, render_template, request, url_for
 
 from extension.flask.api import v1
 
@@ -22,7 +22,7 @@ def home():
 
 
 @front_end_views.route('/show', methods=['GET'])
-# @v1
+@v1
 def show():
     return render_template('show.html')
 
