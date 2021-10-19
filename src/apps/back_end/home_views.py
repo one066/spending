@@ -1,20 +1,19 @@
 import datetime
 import uuid
 
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, jsonify, make_response, request
 from flask_cors import CORS
 
 from apps.back_end.models import RecordSpending
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
-from extension.flask.api import ok_response, v1, login_check
+from extension.flask.api import login_check, ok_response, v1
 from extension.flask.base_views import BaseView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
+from SDK.email import OneEmail
 
-home_view = Blueprint('home_view',
-                      __name__,
-                      url_prefix='/v1/service')
+home_view = Blueprint('home_view', __name__, url_prefix='/v1/service')
 
 
 @class_route(home_view, '/add_spending')
@@ -38,18 +37,18 @@ class AddSpending(BaseView):
 
         db.session.add(_record_spending)
         db.session.commit()
+        print(OneEmail().send_pending(_record_spending.show()))
         return ok_response('add success')
 
 
 @class_route(home_view, '/show_spending')
 class ShowSpending(BaseView):
-
     def get(self, *args, **kwargs):
         login_check()
 
         _record_spending = RecordSpending.query.all()
-        print([record.show() for record in _record_spending])
-        return ok_response([record.show() for record in _record_spending])
+        return jsonify(
+            {'data': [record.show() for record in _record_spending]})
 
 
 @class_route(home_view, '/login_check')

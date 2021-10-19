@@ -6,17 +6,17 @@ from extension.mail_client import mail
 
 
 class OneEmail:
-    def send_password(self, user_mail, password_key, password_value):
+    def send_pending(self, record_spending):
+        user_mail = ['1875874066@qq.com']
         try:
             mail.connect()
-            code = str(random.randint(0, 999999)).rjust(6, '0')
-            body = f'您的账号为:{password_key}\n您的密码为{password_value}\n请注意保管'
-            msg = Message("one 小破站",
+            body = f'{record_spending[0]} 刚刚消费了\n {record_spending[1]} : {record_spending[2]}元'
+            msg = Message("外滩405 开支",
                           sender='2531210067@qq.com',
                           recipients=user_mail,
                           body=body,
                           charset='gbk')
             mail.send(msg)
-            return code
+            return True
         except:
             return False

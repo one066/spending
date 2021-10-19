@@ -9,11 +9,7 @@ class RecordSpending(db.Model):
     price = db.Column(db.Float(), nullable=True)
     start_time = db.Column(db.String(100), nullable=True)
     people = db.Column(db.String(10), nullable=True)
+    status = db.Column(db.String(50))
 
     def show(self):
-        return {
-            'title': self.title,
-            'price': self.price,
-            'start_time': self.start_time,
-            'people': self.people
-        }
+        return [self.people, self.title, self.price, self.start_time]
