@@ -60,7 +60,7 @@ class LoginCheck(BaseView):
         users = {
             'miss123456': 'one',
             'rng3:0dk': 'leo',
-            'zxcv': 'ike',
+            'zxcvzxcv': 'ike',
         }
         if password in users:
             return users[password]
