@@ -37,7 +37,7 @@ class AddSpending(BaseView):
 
         db.session.add(_record_spending)
         db.session.commit()
-        print(OneEmail().send_pending(_record_spending.show()))
+        OneEmail().send_pending(_record_spending.show())
         return ok_response('add success')
 
 
@@ -58,9 +58,9 @@ class LoginCheck(BaseView):
     @staticmethod
     def get_name(password):
         users = {
-            'waitan405-1': 'one',
-            'waitan405-2': 'leo',
-            'waitan405-3': 'ike',
+            'miss123456': 'one',
+            'waitan405': 'leo',
+            'zxcv': 'ike',
         }
         if password in users:
             return users[password]
