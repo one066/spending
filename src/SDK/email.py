@@ -1,5 +1,3 @@
-import random
-
 from flask_mail import Message
 
 from extension.mail_client import mail
@@ -7,7 +5,7 @@ from extension.mail_client import mail
 
 class OneEmail:
     def send_pending(self, record_spending):
-        user_mail = ['1875874066@qq.com']
+        user_mail = ['1875874066@qq.com', '2567703198@qq.com', '1378277486@qq.com']
         try:
             mail.connect()
             body = f'{record_spending[0]} 刚刚消费了\n {record_spending[1]} : {record_spending[2]}元'

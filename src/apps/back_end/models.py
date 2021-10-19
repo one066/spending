@@ -13,3 +13,5 @@ class RecordSpending(db.Model):
 
     def show(self):
         return [self.people, self.title, self.price, self.start_time]
+
+# TODO 添加用户 model

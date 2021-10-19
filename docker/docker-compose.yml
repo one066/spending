@@ -37,4 +37,6 @@ services:
       MYSQL_ROOT_PASSWORD: 123456hk
       MYSQL_DATABASE: spending
       MYSQL_PASSWORD: 123456hk
+    volumes:
+      - "./mysql:/var/lib/mysql"
     restart: always
