@@ -1,85 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block title %} nsu - add-spending {% endblock %}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>one - home</title>
+{% block content %}
 
-    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/all.min.css') }}>
-    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/googleapis.css') }} >
-    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/bootstrop.min.css') }} >
-</head>
-
-<body class="bg-gradient-primary">
-    <div class="container">
-
-        <div class="row justify-content-center">
-
-            <div class="col-xl-10 col-lg-12 col-md-9">
-
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">添加开支</h1>
-                                    </div>
-                                    <form class="user" onSubmit="return false;">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" id="title"
-                                                   name="title"
-                                                   placeholder="描述">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" id="price"
-                                                   name="price"
-                                                   placeholder="价格">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block" value="添加">
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row justify-content-center">
+        <div class="col-xl-12 col-lg-9 col-md-9">
+            <div class="card">
+                <div class="header">
+                    <h1 class="h4 text-gray-900 mb-4">添加开支</h1>
                 </div>
-
-            </div>
-            <div class="col-xl-10 col-lg-12 col-md-9">
-
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="p-5">
-                                    <div class="form-group">
-                                        <a href="{{ url_for('front_end_views.show') }}"><button type="button" class="btn btn-primary btn-user btn-block">查看记录</button></a>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="body">
+                    <form class="user" onSubmit="return false;">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-user" id="title"
+                                   name="title"
+                                   placeholder="描述">
                         </div>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-user" id="price"
+                                   name="price"
+                                   placeholder="价格">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block" value="添加">
+                        </div>
 
+                    </form>
+                </div>
             </div>
         </div>
-
+        <div class="col-xl-12 col-lg-9 col-md-9">
+            <div class="card">
+                <div class="header">
+                    <h2>开支分布</h2>
+                </div>
+                <div class="body">
+                    <div id="echarts" style="width: 400px;height:300px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
 
-    <script src="{{ url_for('front_end_views.static',filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('front_end_views.static',filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('front_end_views.static',filename='js/jquery.easing.min.js') }}"></script>
-    <script src="{{ url_for('front_end_views.static',filename='js/one.min.js') }}"></script>
-    <script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
 
+{% block custom_js %}
+    <script src="{{ url_for('front_end_views.static',filename='js/echarts.min.js') }}"></script>
     <script>
         function checklogin() {
             var price = $('#price').val();
@@ -118,5 +84,54 @@
         }
     }
     </script>
-</body>
-</html>
+    <script>
+        var chartDom = document.getElementById('echarts');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            top: '5%',
+            left: 'center'
+          },
+          series: [
+            {
+              name: 'Access From',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              avoidLabelOverlap: false,
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2
+              },
+              label: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '40',
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: false
+              },
+              data: [
+                { value: 1048, name: 'Search Engine' },
+                { value: 735, name: 'Direct' },
+                { value: 580, name: 'Email' },
+              ]
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+{% endblock %}
