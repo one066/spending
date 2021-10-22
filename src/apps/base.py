@@ -2,7 +2,6 @@ import pkgutil
 from importlib import import_module
 
 from flask import Flask
-from flask_cors import CORS
 
 from configs import dbConfig, emailConfig, initConfig
 from extension.mail_client import mail

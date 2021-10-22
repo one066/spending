@@ -1,10 +1,9 @@
 import datetime
 import uuid
 
-from flask import Blueprint, jsonify, make_response, request
-from flask_cors import CORS
+from flask import Blueprint, jsonify
 
-from apps.back_end.models import RecordSpending
+from apps.back_end.models import RecordSpending, User
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
 from extension.flask.api import login_check, ok_response, v1
@@ -37,7 +36,12 @@ class AddSpending(BaseView):
 
         db.session.add(_record_spending)
         db.session.commit()
-        OneEmail().send_pending(_record_spending.show())
+
+        # 像成员发送消息
+        OneEmail().send_pending(
+            users=User.emails(),
+            record_spending=_record_spending.show()
+        )
         return ok_response('add success')
 
 
@@ -55,24 +59,19 @@ class ShowSpending(BaseView):
 class LoginCheck(BaseView):
     validator = LoginValidator
 
-    @staticmethod
-    def get_name(password):
-        users = {
-            'miss123456': 'one',
-            'rng3:0dk': 'leo',
-            'zxcvzxcv': 'ike',
-        }
-        if password in users:
-            return users[password]
-
     def post(self, *args, **kwargs):
         request_data = self.get_request_data(kwargs)
+        name = request_data['name']
         password = request_data['password']
-        name = self.get_name(password)
-        if name:
+
+        user = User.query.filter_by(name=name).first()
+        if user.login(password):
+
             token = uuid.uuid4().hex
             redis_client.set(name, token)
-            redis_client.expire(name, 60 * 60 * 24)
+
+            # 保留一个星期
+            redis_client.expire(name, 60 * 60 * 24 * 7)
 
             return jsonify({
                 'login': True,
@@ -80,3 +79,11 @@ class LoginCheck(BaseView):
                 'name': name,
             })
         return jsonify({'login': False})
+
+
+@class_route(home_view, '/home_echarts_data')
+class HomeEchartsData(BaseView):
+
+    def get(self, *args, **kwargs):
+        user = RecordSpending.get_home_echarts_data()
+        return user
