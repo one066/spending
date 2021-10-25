@@ -86,4 +86,5 @@ class HomeEchartsData(BaseView):
 
     def get(self, *args, **kwargs):
         user = RecordSpending.get_home_echarts_data()
+        print([{'value': value, 'name': key} for key, value in user.items()])
         return jsonify([{'value': value, 'name': key} for key, value in user.items()])
