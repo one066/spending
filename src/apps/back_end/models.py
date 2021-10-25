@@ -32,8 +32,8 @@ class RecordSpending(db.Model):
 class User(db.Model):
     __tablename__ = 'user'
 
-    id = db.Column(db.String(32), nullable=True, primary_key=True)
-    name = db.Column(db.String(50), nullable=True)
+    id = db.Column(db.String(32), nullable=True)
+    name = db.Column(db.String(50), nullable=True, primary_key=True)
     password = db.Column(db.String(50), nullable=True)
     email = db.Column(db.String(20), nullable=True)
 

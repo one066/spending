@@ -21,7 +21,7 @@ def create_db():
     click.echo('----->    create mysql db success    <-----')
 
 
-if __name__ == '__main__':
-    cli()
 # if __name__ == '__main__':
-#     app.run()
+#     cli()
+if __name__ == '__main__':
+    app.run()
