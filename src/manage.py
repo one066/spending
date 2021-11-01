@@ -1,7 +1,6 @@
 import click
 
-from apps.back_end.models import RecordSpending
-from apps.back_end.models import User
+from apps.back_end.models import RecordSpending, User
 from apps.base import create_app
 from extension.mysql_client import db
 

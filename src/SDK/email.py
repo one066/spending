@@ -17,3 +17,20 @@ class OneEmail:
             return True
         except:
             return False
+
+    def every_mouth_data(self, users, title):
+        try:
+            mail.connect()
+            body = f'本月开支表在附件里，分析情况请前去网页查看'
+            msg = Message(f"外滩405 {title} 开支",
+                          sender='2531210067@qq.com',
+                          recipients=users,
+                          body=body,
+                          charset='gbk')
+
+            with open('apps/front_end/static/data.xlsx') as fp:
+                mail.attach("data.xlsx", 'application/octet-stream', fp.read())
+            mail.send(msg)
+            return True
+        except:
+            return False

@@ -15,10 +15,6 @@ class RecordSpending(db.Model):
         start_time = self.start_time[5:16]
         return [self.people, self.title, self.price, start_time, self.id]
 
-    @classmethod
-    def shows(cls):
-        return [spending.show() for spending in cls.query.all()]
-
 
 class User(db.Model):
     __tablename__ = 'user'

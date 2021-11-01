@@ -33,24 +33,24 @@ class BaseView(MethodView):
         except TokenFailed:
             return redirect_login()
 
-        except Exception as exception:
-            # 验证器
-            if isinstance(exception, ValidationError):
-                return failed_response(
-                    error_type='validation_error',
-                    error_message=exception.messages,
-                )
-            # 自定义异常
-            elif hasattr(exception, 'error_type') and hasattr(
-                    exception, 'error_message'):
-                return failed_response(
-                    error_type=exception.error_type,
-                    error_message=exception.error_message,
-                )
-            # 系统异常
-            else:
-                print(exception)
-                return failed_response(
-                    error_type='bug',
-                    error_message=repr(exception),
-                )
+        # except Exception as exception:
+        #     # 验证器
+        #     if isinstance(exception, ValidationError):
+        #         return failed_response(
+        #             error_type='validation_error',
+        #             error_message=exception.messages,
+        #         )
+        #     # 自定义异常
+        #     elif hasattr(exception, 'error_type') and hasattr(
+        #             exception, 'error_message'):
+        #         return failed_response(
+        #             error_type=exception.error_type,
+        #             error_message=exception.error_message,
+        #         )
+        #     # 系统异常
+        #     else:
+        #         print(exception)
+        #         return failed_response(
+        #             error_type='bug',
+        #             error_message=repr(exception),
+        #         )

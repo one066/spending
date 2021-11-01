@@ -4,7 +4,6 @@ from importlib import import_module
 from flask import Flask
 from flask_apscheduler import APScheduler
 
-
 from configs import dbConfig, emailConfig, initConfig
 from extension.mail_client import mail
 from extension.mysql_client import db

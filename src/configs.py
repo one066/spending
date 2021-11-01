@@ -11,17 +11,18 @@ class initConfig(object):
     KEY = "x9uo3L1xDDcF58Pt"
 
     # 定时任务配置
-    # SCHEDULER_API_ENABLED = True
+    SCHEDULER_API_ENABLED = True
+    SCHEDULER_TIMEZONE = 'Asia/Shanghai'
     JOBS = [
         {
             'id': 'No1',
-            'func': 'SDK.timed_task.task1:task1',
+            'func': 'timed_task.task1:task1',
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '1-12',
-                'hour': '20',
-                'minute': '10'
+                'day': '1',
+                'hour': '12',
+                'minute': '58'
             }
         },
     ]
