@@ -2,6 +2,8 @@ import pkgutil
 from importlib import import_module
 
 from flask import Flask
+from flask_apscheduler import APScheduler
+
 
 from configs import dbConfig, emailConfig, initConfig
 from extension.mail_client import mail
@@ -15,6 +17,11 @@ def create_app():
     app.config.from_object(initConfig)
     app.config.from_object(emailConfig)
     app.config.from_object(dbConfig)
+
+    # 定时任务
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    scheduler.start()
 
     # 初始化组件
     mail.init_app(app)

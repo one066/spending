@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 from flask import Blueprint, jsonify
+from sqlalchemy import func
 
 from apps.back_end.models import RecordSpending, User
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
@@ -50,7 +51,7 @@ class ShowSpending(BaseView):
     def get(self, *args, **kwargs):
         login_check()
 
-        _record_spending = RecordSpending.query.all()
+        _record_spending = RecordSpending.query.f.all()
         return jsonify(
             {'data': [record.show() for record in _record_spending]})
 
@@ -66,7 +67,6 @@ class LoginCheck(BaseView):
 
         user = User.query.filter_by(name=name).first()
         if user.login(password):
-
             token = uuid.uuid4().hex
             redis_client.set(name, token)
 
@@ -84,6 +84,7 @@ class LoginCheck(BaseView):
 @class_route(home_view, '/home_echarts_data')
 class HomeEchartsData(BaseView):
 
-    def get(self, *args, **kwargs):
-        user = RecordSpending.get_home_echarts_data()
-        return jsonify([{'value': value, 'name': key} for key, value in user.items()])
+    def get(self):
+        users = db.session.query(
+            RecordSpending.people, func.sum(RecordSpending.price).label('value')).group_by(RecordSpending.people)
+        return jsonify([{'name': user.people, 'value': user.value} for user in users.all()])

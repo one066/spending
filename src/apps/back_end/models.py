@@ -19,15 +19,6 @@ class RecordSpending(db.Model):
     def shows(cls):
         return [spending.show() for spending in cls.query.all()]
 
-    @classmethod
-    def get_home_echarts_data(cls):
-        data = {}
-        for spending in cls.query.all():
-            if spending.people in data:
-                data[spending.people] += spending.price
-            else:
-                data[spending.people] = spending.price
-        return data
 
 class User(db.Model):
     __tablename__ = 'user'
