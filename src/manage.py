@@ -1,7 +1,6 @@
 import click
 
-from apps.back_end.models import RecordSpending
-from apps.back_end.models import User
+from apps.back_end.models import RecordSpending, User
 from apps.base import create_app
 from extension.mysql_client import db
 
@@ -21,7 +20,7 @@ def create_db():
     click.echo('----->    create mysql db success    <-----')
 
 
-if __name__ == '__main__':
-    cli()
 # if __name__ == '__main__':
-#     app.run()
+#     cli()
+if __name__ == '__main__':
+    app.run()
