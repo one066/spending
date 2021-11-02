@@ -20,10 +20,15 @@ def task1():
         '''select title, people, price, start_time from record_spending where status is null''',
         db.engine.raw_connection()
     )
-    df.to_excel('apps/front_end/static/data.xlsx')
+    df.to_excel('apps/front_end/static/data.xlsx', encoding='utf-8')
     title = get_title()
-    print(OneEmail().every_mouth_data(users=User.emails(),
-                                      title=title))
+
+    # 发送邮件
+    # OneEmail().every_mouth_data(users=User.emails(), title=title)
+
+    # 更新数据库
+    # RecordSpending.query.filter(RecordSpending.status.is_(None)).update({'status': title})
+    # db.session.commit()
 
 
 if __name__ == '__main__':

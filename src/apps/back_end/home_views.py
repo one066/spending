@@ -89,7 +89,6 @@ class HomeEchartsData(BaseView):
                 RecordSpending.people,
                 RecordSpending.status).having(RecordSpending.status.is_(None))
 
-        task1()
         return jsonify([{
             'name': user.people,
             'value': '%.2f' % user.value
