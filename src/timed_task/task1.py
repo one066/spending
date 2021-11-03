@@ -31,7 +31,3 @@ def task1():
     RecordSpending.query.filter(RecordSpending.status == '暂无').update(
         {'status': title})
     db.session.commit()
-
-
-if __name__ == '__main__':
-    task1()
