@@ -19,6 +19,9 @@ class ShowSpending(BaseView):
         request_data = self.get_request_data_v1(kwargs)
         _record_spending = RecordSpending.query.filter_by(
             status=request_data['status']).all()
+
+        RecordSpending.query.filter(RecordSpending.status is None).update(
+            {'status': '暂无'})
         return jsonify(
             {'data': [record.show() for record in _record_spending]})
 
