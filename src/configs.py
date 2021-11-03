@@ -20,8 +20,8 @@ class initConfig(object):
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '1',
-                'hour': '12',
+                'day': '12',
+                'hour': '21',
                 'minute': '58'
             }
         },

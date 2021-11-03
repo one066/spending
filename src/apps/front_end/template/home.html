@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="row justify-content-center">
-        <div class="col-xl-12 col-lg-9 col-md-9">
+        <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card">
                 <div class="header">
                     <h1 class="h4 text-gray-900 mb-4">添加开支</h1>
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-12 col-lg-9 col-md-9">
+        <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card">
                 <div class="header">
                     <h2>开支分布</h2>
@@ -128,7 +128,7 @@
           ]
         };
         $.ajax({
-                url: "{{ url_for('home_view.HomeEchartsData') }}",
+                url: "{{ url_for('echarts_service.PieData') }}?status=暂无",
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {
@@ -139,7 +139,7 @@
                         myChart.setOption({
                             series: [
                                 {
-                                  name: 'Access From',
+                                  name: '开支情况',
                                   type: 'pie',
                                   radius: ['40%', '70%'],
                                   avoidLabelOverlap: false,
@@ -149,8 +149,8 @@
                                     borderWidth: 2
                                   },
                                   label: {
-                                    show: false,
-                                    position: 'center'
+                                      show: false,
+                                      formatter:'{d}%'
                                   },
                                   emphasis: {
                                     label: {

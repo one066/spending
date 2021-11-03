@@ -4,7 +4,6 @@ from extension.mail_client import mail
 
 
 class OneEmail:
-
     def __init__(self):
         self.mail = mail
 
@@ -34,7 +33,8 @@ class OneEmail:
                           body=body,
                           charset='gbk')
             with open('apps/front_end/static/data.xlsx', 'rb') as fp:
-                msg.attach(f'外滩405 {title} 开支.xlsx', 'application/octet-stream', fp.read())
+                msg.attach(f'外滩405 {title} 开支.xlsx',
+                           'application/octet-stream', fp.read())
             self.mail.send(msg)
             return True
         except Exception as ex:

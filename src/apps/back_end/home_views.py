@@ -2,17 +2,15 @@ import datetime
 import uuid
 
 from flask import Blueprint, jsonify
-from sqlalchemy import func
 
 from apps.back_end.models import RecordSpending, User
 from apps.back_end.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
-from extension.flask.api import login_check, ok_response, v1
+from extension.flask.api import login_check, ok_response
 from extension.flask.base_views import BaseView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
 from SDK.email import OneEmail
-from timed_task.task1 import task1
 
 home_view = Blueprint('home_view', __name__, url_prefix='/v1/service')
 
@@ -53,13 +51,12 @@ class AddSpending(BaseView):
         spending_id = uuid.uuid4().hex
         start_time = datetime.datetime.now().isoformat()
 
-        _record_spending = RecordSpending(
-            id=spending_id,
-            start_time=start_time,
-            title=request_data['title'],
-            price=request_data['price'],
-            people=self.get_name(),
-        )
+        _record_spending = RecordSpending(id=spending_id,
+                                          start_time=start_time,
+                                          title=request_data['title'],
+                                          price=request_data['price'],
+                                          people=self.get_name(),
+                                          status='暂无')
 
         db.session.add(_record_spending)
         db.session.commit()
@@ -68,28 +65,3 @@ class AddSpending(BaseView):
         OneEmail().send_pending(users=User.emails(),
                                 record_spending=_record_spending.show())
         return ok_response('add success')
-
-
-@class_route(home_view, '/show_spending')
-class ShowSpending(BaseView):
-    def get(self):
-        login_check()
-
-        _record_spending = RecordSpending.query.filter_by(status=None).all()
-        return jsonify(
-            {'data': [record.show() for record in _record_spending]})
-
-
-@class_route(home_view, '/home_echarts_data')
-class HomeEchartsData(BaseView):
-    def get(self):
-        users = db.session.query(
-            RecordSpending.status, RecordSpending.people,
-            func.sum(RecordSpending.price).label('value')).group_by(
-                RecordSpending.people,
-                RecordSpending.status).having(RecordSpending.status.is_(None))
-
-        return jsonify([{
-            'name': user.people,
-            'value': '%.2f' % user.value
-        } for user in users.all()])
