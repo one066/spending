@@ -20,8 +20,8 @@ class initConfig(object):
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '1',
-                'hour': '12',
+                'day': '12',
+                'hour': '21',
                 'minute': '58'
             }
         },
@@ -29,7 +29,7 @@ class initConfig(object):
 
 
 class dbConfig(object):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456hk@127.0.0.1:3306/spending?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456hk@mysql:3306/spending?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_POOL_RECYCLE = 800
 

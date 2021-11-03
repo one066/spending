@@ -16,6 +16,18 @@ class BaseView(MethodView):
         request_data = deserializer.load(request_data)
         return request_data
 
+    def get_request_data_v1(self, kwargs):
+        request_data = {}
+        for key, value in request.args.items():
+            if isinstance(value, list) and len(value) == 1:
+                request_data[key] = value[0]
+            else:
+                request_data[key] = value
+        request_data.update(kwargs)
+        deserializer = self.validator()
+        request_data = deserializer.load(request_data)
+        return request_data
+
     @classmethod
     def parse_json(cls):
         """解析 request body 为 json

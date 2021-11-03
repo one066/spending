@@ -9,3 +9,12 @@ class AddSpendingValidator(Schema):
 class LoginValidator(Schema):
     name = fields.Str(required=True)
     password = fields.Str(required=True)
+
+
+class StatusValidator(Schema):
+    status = fields.Str(required=True)
+
+
+class PieValidator(Schema):
+    status = fields.Str(required=True)
+    _ = fields.Str(required=True)
