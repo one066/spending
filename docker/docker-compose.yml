@@ -27,7 +27,8 @@ services:
       - "web"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
-
+      - "./cert/6541345_www.kkone.top.key:/etc/nginx/6541345_www.kkone.top.key"
+      - "./cert/6541345_www.kkone.top.pem:/etc/nginx/6541345_www.kkone.top.pem"
 
   mysql:
     image: "mysql"
