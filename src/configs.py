@@ -21,8 +21,8 @@ class initConfig(object):
             'trigger': {
                 'type': 'cron',
                 'day': '10',
-                'hour': '13',
-                'minute': '30'
+                'hour': '14',
+                'minute': '10'
             }
         },
     ]
