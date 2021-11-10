@@ -16,7 +16,7 @@ class initConfig(object):
     JOBS = [
         {
             'id': 'No1',
-            'func': 'timed_task.task1:task1',
+            'func': 'apps.tasks.task1:task1',
             'args': '',
             'trigger': {
                 'type': 'cron',
