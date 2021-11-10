@@ -12,7 +12,7 @@ services:
       - redis
       - mysql
     environment:
-      STAGE: development
+      STAGE: production
 
   redis:
     image: "redis:alpine"
