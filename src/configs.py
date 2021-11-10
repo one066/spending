@@ -20,9 +20,9 @@ class initConfig(object):
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '12',
-                'hour': '21',
-                'minute': '58'
+                'day': '10',
+                'hour': '13',
+                'minute': '30'
             }
         },
     ]
@@ -42,3 +42,4 @@ class emailConfig(object):
     MAIL_DEBUG = True
     MAIL_USERNAME = '2531210067@qq.com'
     MAIL_PASSWORD = 'hivzkwegzwytecja'
+    MAIL_ASCII_ATTACHMENTS = True
