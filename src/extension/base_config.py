@@ -20,9 +20,9 @@ class BaseConfig(object):
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '10',
-                'hour': '16',
-                'minute': '50',
+                'day': '11',
+                'hour': '20',
+                'minute': '5',
                 'second': '20'
             }
         },

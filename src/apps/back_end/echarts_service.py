@@ -6,7 +6,7 @@ from apps.back_end.validator import PieValidator, StatusValidator
 from extension.flask import class_route
 from extension.flask.base_views import BaseView
 from extension.mysql_client import db
-from SDK.email import OneEmail
+from SDK.email import OneEmail, get_title
 
 echarts_service = Blueprint('echarts_service',
                             __name__,
@@ -85,7 +85,8 @@ class SendEveryMouthUserSpending(BaseView):
         OneEmail().every_mouth_data(users=User.emails(), pie_dates=pie_dates)
 
         # 更新数据库
-        # RecordSpending.query.filter(RecordSpending.status == '暂无').update(
-        #     {'status': title})
-        # db.session.commit()
+        title = get_title()
+        RecordSpending.query.filter(RecordSpending.status == '暂无').update(
+            {'status': title})
+        db.session.commit()
         return jsonify('ok')
