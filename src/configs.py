@@ -16,13 +16,14 @@ class initConfig(object):
     JOBS = [
         {
             'id': 'No1',
-            'func': 'apps.tasks.task1:task1',
+            'func': 'tasks.task1:task1',
             'args': '',
             'trigger': {
                 'type': 'cron',
                 'day': '10',
                 'hour': '14',
-                'minute': '10'
+                'minute': '20',
+                'second': '40'
             }
         },
     ]
