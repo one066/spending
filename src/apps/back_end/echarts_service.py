@@ -1,9 +1,12 @@
+import pandas as pd
 from flask import Blueprint, jsonify
 
-from apps.back_end.models import RecordSpending
+from apps.back_end.models import RecordSpending, User
 from apps.back_end.validator import PieValidator, StatusValidator
 from extension.flask import class_route
 from extension.flask.base_views import BaseView
+from extension.mysql_client import db
+from SDK.email import OneEmail
 
 echarts_service = Blueprint('echarts_service',
                             __name__,
@@ -64,3 +67,25 @@ class LineData(BaseView):
             'users': users,
             'series': series,
         })
+
+
+@class_route(echarts_service, '/send_every_mouth_user_spending')
+class SendEveryMouthUserSpending(BaseView):
+    def get(self, *arg, **kwargs):
+        user_data = db.session.query(
+            RecordSpending.title, RecordSpending.people, RecordSpending.price,
+            RecordSpending.start_time).filter_by(status='暂无').all()
+
+        df = pd.DataFrame(user_data,
+                          columns=['title', 'name', 'price', 'start_time'])
+        df.to_excel('apps/front_end/static/data.xlsx', encoding='utf-8')
+
+        # 发送邮件
+        pie_dates = RecordSpending.get_pie_dates('暂无')
+        OneEmail().every_mouth_data(users=User.emails(), pie_dates=pie_dates)
+
+        # 更新数据库
+        # RecordSpending.query.filter(RecordSpending.status == '暂无').update(
+        #     {'status': title})
+        # db.session.commit()
+        return jsonify('ok')
