@@ -1,7 +1,7 @@
 import requests
 
 
-def task1():
+def send_every_mouth_user_spending():
     """ 定时发邮箱
     """
     response = requests.get(

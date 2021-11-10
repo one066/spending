@@ -16,14 +16,14 @@ class initConfig(object):
     JOBS = [
         {
             'id': 'No1',
-            'func': 'tasks.task1:task1',
+            'func': 'tasks.every_mouth:send_every_mouth_user_spending',
             'args': '',
             'trigger': {
                 'type': 'cron',
                 'day': '10',
-                'hour': '14',
-                'minute': '20',
-                'second': '40'
+                'hour': '15',
+                'minute': '26',
+                'second': '00'
             }
         },
     ]
