@@ -1,10 +1,13 @@
 import requests
 
+from extension.project_config import get_config
+
 
 def send_every_mouth_user_spending():
     """ 定时发邮箱
     """
-    response = requests.get(
-        'http://127.0.0.1:5000/v1/service/send_every_mouth_user_spending')
+    send_every_mouth_user_spending_url = get_config(
+    ).SEND_EVERY_MOUTH_USER_SPENDING_URL
+    response = requests.get(send_every_mouth_user_spending_url)
     response.raise_for_status()
     print(response.json())

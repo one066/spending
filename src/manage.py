@@ -3,6 +3,7 @@ import click
 from apps.back_end.models import RecordSpending, User
 from apps.base import create_app
 from extension.mysql_client import db
+from extension.project_config import get_config
 
 app = create_app()
 
@@ -21,6 +22,8 @@ def create_db():
 
 
 if __name__ == '__main__':
-    cli()
-# if __name__ == '__main__':
-#     app.run()
+    stage = get_config().STAGE
+    if stage == 'production':
+        cli()
+    else:
+        app.run()

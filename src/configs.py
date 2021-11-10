@@ -1,46 +1,19 @@
-import os
-from datetime import timedelta
+from extension.base_config import BaseConfig
 
 
-class initConfig(object):
-    # INIT
-    SECRET_KEY = os.urandom(24)
-    DEBUG = True
-    # SEND_FILE_MAX_AGE_DEFAULT = timedelta(seconds=1)   # 强制取消缓存
-    PERMANENT_SESSION_LIFETIME = timedelta(seconds=70)
-    KEY = "x9uo3L1xDDcF58Pt"
+class Development(BaseConfig):
+    STAGE = 'development'
 
-    # 定时任务配置
-    SCHEDULER_API_ENABLED = True
-    SCHEDULER_TIMEZONE = 'Asia/Shanghai'
-    JOBS = [
-        {
-            'id': 'No1',
-            'func': 'tasks.every_mouth:send_every_mouth_user_spending',
-            'args': '',
-            'trigger': {
-                'type': 'cron',
-                'day': '10',
-                'hour': '15',
-                'minute': '26',
-                'second': '00'
-            }
-        },
-    ]
+    SEND_EVERY_MOUTH_USER_SPENDING_URL = 'HTTP://127.0.0.1:5000/v1/service/send_every_mouth_user_spending'
+
+    REDIS_HOST = '127.0.0.1'
 
 
-class dbConfig(object):
+class Production(BaseConfig):
+    DEBUG = False
+    STAGE = 'production'
+
+    SEND_EVERY_MOUTH_USER_SPENDING_URL = 'https://121.43.135.49/v1/service/send_every_mouth_user_spending'
+    REDIS_HOST = 'redis'
+
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456hk@mysql:3306/spending?charset=utf8'
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_POOL_RECYCLE = 800
-
-
-class emailConfig(object):
-    MAIL_SERVER = 'smtp.qq.com'
-    MAIL_PORT = 465
-    MAIL_USE_SSL = True
-    MAIL_USE_TLS = False
-    MAIL_DEBUG = True
-    MAIL_USERNAME = '2531210067@qq.com'
-    MAIL_PASSWORD = 'hivzkwegzwytecja'
-    MAIL_ASCII_ATTACHMENTS = True
