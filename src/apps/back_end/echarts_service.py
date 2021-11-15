@@ -81,9 +81,7 @@ class SendEveryMouthUserSpending(BaseView):
         df.to_excel('apps/front_end/static/data.xlsx', encoding='utf-8')
 
         # 发送邮件
-        pie_dates = RecordSpending.get_pie_dates(
-            '暂无'
-        )
+        pie_dates = RecordSpending.get_pie_dates('暂无')
         OneEmail().every_mouth_data(users=User.emails(), pie_dates=pie_dates)
 
         # 更新数据库
