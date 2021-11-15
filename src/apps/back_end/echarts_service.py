@@ -71,7 +71,7 @@ class LineData(BaseView):
 
 @class_route(echarts_service, '/send_every_mouth_user_spending')
 class SendEveryMouthUserSpending(BaseView):
-    def get(self, *arg, **kwargs):
+    def get(self):
         user_data = db.session.query(
             RecordSpending.title, RecordSpending.people, RecordSpending.price,
             RecordSpending.start_time).filter_by(status='暂无').all()
