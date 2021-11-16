@@ -11,8 +11,8 @@ pipeline:
   build_docker_image:
     image: plugins/docker
     registry: 127.0.0.1:5000
-    repo: 127.0.0.1:5000/spending
-#    cache_from: 127.0.0.1:5000/spending:v2
+    repo: 127.0.0.1:5000/oneio/spending
+    cache_from: 127.0.0.1:5000/oneio/spending:v2
     tags:
     - v2
     when:
