@@ -1,9 +1,0 @@
-pipeline:
-
-  lint:
-    image: 127.0.0.1:5000/lint:v1
-    commands:
-    - cd src
-    - ls -al
-    - yapf -dr . | (! grep '.')
-    - isort . --check-only --diff
