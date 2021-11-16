@@ -83,8 +83,8 @@
                     } else {
                         $.cookie("token", null, {expires: -1});
                         $.cookie("name", null, {expires: -1});
-                        $.cookie('name', data.valueOf()['name'], {expires: 1, path: '/'});
-                        $.cookie('token', data.valueOf()['token'], {expires: 1, path: '/'});
+                        $.cookie('name', data.valueOf()['name'], {expires: 7, path: '/'});
+                        $.cookie('token', data.valueOf()['token'], {expires: 7, path: '/'});
                         window.location.href = "{{ url_for('front_end_views.home') }}";
                     }
                 },
