@@ -10,6 +10,8 @@ pipeline:
 
   build_docker_image:
     image: plugins/docker
+    commands:
+      - echo { "insecure-registries": ["47.97.254.68:5000"] } > /etc/docker/daemon.json
     registry: 127.0.0.1:5000
     repo: 127.0.0.1:5000/spending
     cache_from: 127.0.0.1:5000/spending:v111
