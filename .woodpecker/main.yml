@@ -12,8 +12,8 @@ pipeline:
     image: plugins/docker
     registry: 127.0.0.1:5000
     repo: 127.0.0.1:5000/spending
-    cache_from: 127.0.0.1:5000/spending:v3
+    cache_from: 127.0.0.1:5000/spending:v1
     tags:
-    - v3
+    - v1
     when:
       event: push
