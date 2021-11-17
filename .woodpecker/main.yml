@@ -1,11 +1,19 @@
 pipeline:
 
+  lint:
+    image: 127.0.0.1:5000/lint:v1
+    commands:
+    - cd src
+    - ls -al
+    - yapf -dr . | (! grep '.')
+    - isort . --check-only --diff
+
   build_docker_image:
     image: plugins/docker
     registry: 127.0.0.1:5000
     repo: 127.0.0.1:5000/spending
-    cache_from: 127.0.0.1:5000/spending:latest
+    cache_from: 127.0.0.1:5000/spending:v1
     tags:
-    - latest
+    - v1
     when:
       event: push
