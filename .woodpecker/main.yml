@@ -1,7 +1,7 @@
 pipeline:
 
   lint:
-    image: 127.0.0.1:5000/lint:v1
+    image: registry.kkone.top:5000/lint:v1
     commands:
     - cd src
     - ls -al
@@ -10,12 +10,9 @@ pipeline:
 
   build_docker_image:
     image: plugins/docker
-    insecure: true
     registry: registry.kkone.top:5000
     repo: registry.kkone.top:5000/spending
-    cache_from: registry.kkone.top:5000/spending:latest
     tags:
-    - ${DRONE_COMMIT_SHA}
-    - latest
+    - v1
     when:
       event: push
