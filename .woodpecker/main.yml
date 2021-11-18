@@ -1,7 +1,7 @@
 pipeline:
 
   lint:
-    image: registry.kkone.top:5000/lint:v1
+    image: 127.0.0.1:5000/lint:v1
     commands:
     - cd src
     - ls -al
@@ -10,9 +10,10 @@ pipeline:
 
   build_docker_image:
     image: plugins/docker
-    registry: registry.kkone.top:5000
-    repo: registry.kkone.top:5000/spending
+    insecure: true
+    registry: 47.97.254.68:5000
+    repo: 47.97.254.68:5000/spending
     tags:
-    - v1
+    - latest
     when:
       event: push
