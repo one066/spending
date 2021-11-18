@@ -11,7 +11,7 @@ pipeline:
   build_docker_image:
     image: plugins/docker
     insecure: true
-    bip: false
+    bip: true
     registry: 47.97.254.68:5000
     repo: 47.97.254.68:5000/spending
     cache_from: 47.97.254.68:5000/spending:v1
