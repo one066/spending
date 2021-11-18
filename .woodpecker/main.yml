@@ -13,7 +13,9 @@ pipeline:
     insecure: true
     registry: registry.kkone.top:5000
     repo: registry.kkone.top:5000/spending
+    cache_from: registry.kkone.top:5000/spending:latest
     tags:
-    - v1
+    - ${DRONE_COMMIT_SHA}
+    - latest
     when:
       event: push
