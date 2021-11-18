@@ -11,8 +11,7 @@ pipeline:
   build_docker_image:
     image: plugins/docker
     insecure: true
-#    build_args:
-#      - HTTP_PROXY=http://yourproxy.com
+    add_host: 47.97.254.68
     registry: 47.97.254.68:5000
     repo: 47.97.254.68:5000/spending
     tags:
