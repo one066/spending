@@ -11,8 +11,8 @@ pipeline:
   build_docker_image:
     image: plugins/docker
     insecure: true
-    registry: 47.97.254.68:5000
-    repo: 47.97.254.68:5000/spending
+    registry: registry.kkone.top:5000
+    repo: registry.kkone.top:5000/spending
     tags:
     - v1
     when:
