@@ -11,10 +11,8 @@ pipeline:
   build_docker_image:
     image: plugins/docker
     insecure: true
-    add_host: 47.97.254.68
     registry: 47.97.254.68:5000
     repo: 47.97.254.68:5000/spending
-    cache_from: 47.97.254.68:5000/spending:v1
     tags:
     - v1
     when:
