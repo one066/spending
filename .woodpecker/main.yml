@@ -14,8 +14,7 @@ pipeline:
       - echo { "insecure-registries""[:]" ["47.97.254.68:5000"] } > /etc/docker/daemon.json
     registry: 47.97.254.68:5000
     repo: 47.97.254.68:5000/spending
-    cache_from: 47.97.254.68:5000/spending:v2
     tags:
-    - v2
+    - v1
     when:
       event: push
