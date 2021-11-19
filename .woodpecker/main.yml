@@ -10,12 +10,10 @@ pipeline:
 
   build_docker_image:
     image: plugins/docker
-    commands:
-      - echo { "insecure-registries""[:]" ["47.97.254.68:5000"] } > /etc/docker/daemon.json
-    registry: 47.97.254.68:5000
-    repo: 47.97.254.68:5000/spending
-    cache_from: 47.97.254.68:5000/spending:v2
+    insecure: true
+    registry: 172.21.0.1:5000
+    repo: 172.21.0.1:5000/spending
     tags:
-    - v2
+      - v1
     when:
       event: push
