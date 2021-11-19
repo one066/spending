@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  web:
+  spending:
     restart: always
     image: 47.97.254.68:5000/spending:v1
     build: ../
@@ -15,24 +15,24 @@ services:
       STAGE: production
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     restart: always
 
   nginx:
-    image: "nginx"
+    image: nginx
     restart: always
     ports:
       - "80:80"
       - "443:443"
     links:
-      - "web"
+      - "spending"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
       - "./cert/6571782_kkone.top.key:/etc/nginx/6571782_kkone.top.key"
       - "./cert/6571782_kkone.top.pem:/etc/nginx/6571782_kkone.top.pem"
 
   mysql:
-    image: "mysql"
+    image: mysql
 #    ports:
 #      - "3306:3306"
     environment:
