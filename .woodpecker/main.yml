@@ -16,4 +16,16 @@ pipeline:
     tags:
       - v1
     when:
-      event: push
+      event: tag
+
+  web_hook:
+    image: plugins/webhook
+    urls:
+      - http://121.43.135.49:8009/web_hook/accept
+    content_type: application/json
+    template: |
+      {
+        "name": "spending",
+      }
+    when:
+      event: tag
