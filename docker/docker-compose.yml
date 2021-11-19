@@ -14,31 +14,12 @@ services:
     environment:
       STAGE: production
 
-  redis:
-    image: "redis:alpine"
-    restart: always
-
   nginx:
     image: "nginx"
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "8009:8008"
     links:
       - "web"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
-      - "./cert/6571782_kkone.top.key:/etc/nginx/6571782_kkone.top.key"
-      - "./cert/6571782_kkone.top.pem:/etc/nginx/6571782_kkone.top.pem"
-
-  mysql:
-    image: "mysql"
-#    ports:
-#      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456hk
-      MYSQL_DATABASE: spending
-      MYSQL_PASSWORD: 123456hk
-    volumes:
-      - "./mysql:/var/lib/mysql"
-    restart: always

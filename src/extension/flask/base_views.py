@@ -1,9 +1,7 @@
 from flask import request
 from flask.views import MethodView
-from marshmallow import ValidationError
 
-from extension.flask.api import failed_response, redirect_login
-from extension.flask.exceptions import TokenFailed
+from extension.flask.api import failed_response
 
 
 class BaseView(MethodView):
@@ -34,35 +32,22 @@ class BaseView(MethodView):
         """
         return request.json or {}
 
-    @classmethod
-    def get_name(cls):
-        cookie = request.cookies
-        return cookie.get('name', 'x')
-
     def dispatch_request(self, *args, **kwargs):
         try:
             return super(BaseView, self).dispatch_request(*args, **kwargs)
-        except TokenFailed:
-            return redirect_login()
+        except Exception as exception:
 
-        # except Exception as exception:
-        #     # 验证器
-        #     if isinstance(exception, ValidationError):
-        #         return failed_response(
-        #             error_type='validation_error',
-        #             error_message=exception.messages,
-        #         )
-        #     # 自定义异常
-        #     elif hasattr(exception, 'error_type') and hasattr(
-        #             exception, 'error_message'):
-        #         return failed_response(
-        #             error_type=exception.error_type,
-        #             error_message=exception.error_message,
-        #         )
-        #     # 系统异常
-        #     else:
-        #         print(exception)
-        #         return failed_response(
-        #             error_type='bug',
-        #             error_message=repr(exception),
-        #         )
+            # 自定义异常
+            if hasattr(exception, 'error_type') and hasattr(
+                    exception, 'error_message'):
+                return failed_response(
+                    error_type=exception.error_type,
+                    error_message=exception.error_message,
+                )
+            # 系统异常
+            else:
+                print(exception)
+                return failed_response(
+                    error_type='bug',
+                    error_message=repr(exception),
+                )

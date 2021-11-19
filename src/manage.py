@@ -1,29 +1,6 @@
-import click
-
-from apps.back_end.models import RecordSpending, User
 from apps.base import create_app
-from extension.mysql_client import db
-from extension.project_config import get_config
 
 app = create_app()
 
-
-@click.group()
-def cli():
-    pass
-
-
-@cli.command('create_db')
-def create_db():
-    click.echo('----->    start create mysql db     <-----')
-    with app.app_context():
-        db.create_all()
-    click.echo('----->    create mysql db success    <-----')
-
-
 if __name__ == '__main__':
-    stage = get_config().STAGE
-    if stage == 'production':
-        cli()
-    else:
-        app.run()
+    app.run()

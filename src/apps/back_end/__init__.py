@@ -1,6 +1,5 @@
-from apps.back_end.echarts_service import echarts_service
-from apps.back_end.home_views import home_view
+from apps.back_end.web_hook import web_hook
 
-blueprints = [home_view, echarts_service]
+blueprints = [web_hook]
 
 __all__ = ['blueprints']
