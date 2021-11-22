@@ -1,11 +1,10 @@
 pipeline:
 
   clone:
-    git:
-      image: woodpeckerci/plugin-git
-      commands:
-        - git config --global http.proxy 'http://127.0.0.1:1087'
-        - git config --global https.proxy 'https://127.0.0.1:1087'
+    image: woodpeckerci/plugin-git
+    commands:
+      - git config --global http.proxy 'http://127.0.0.1:1087'
+      - git config --global https.proxy 'https://127.0.0.1:1087'
 
   lint:
     image: 127.0.0.1:5000/lint:v1
