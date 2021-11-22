@@ -76,7 +76,8 @@
                             alert('添加失败：' + data.valueOf()['error_type'])
                         }
                         else {
-                            alert('添加成功\n '+ title + ':' + price)
+                            alert('添加成功\n '+ title + ':' + price);
+                            location.reload()
                         }
                     },
                     error: function (e) {
