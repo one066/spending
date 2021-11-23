@@ -24,7 +24,7 @@ pipeline:
     tags:
       - latest
     when:
-      event: tag
+      event: push
 
   web_hook:
     image: plugins/webhook
