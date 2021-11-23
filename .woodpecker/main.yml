@@ -3,7 +3,7 @@ pipeline:
   clone:
     image: woodpeckerci/plugin-git
     commands:
-      - git config --global http.version HTTP/1.1
+      - git config --global http.version 'HTTP/1.1'
       - git config --global http.proxy 'http://127.0.0.1:1087'
       - git config --global https.proxy 'https://127.0.0.1:1087'
 
