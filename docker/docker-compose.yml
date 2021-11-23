@@ -6,8 +6,6 @@ services:
     build: ../
     volumes:
       - ../src:/app
-#    ports:
-#      - "8008:8008"
     links:
       - redis
       - mysql
@@ -33,8 +31,6 @@ services:
 
   mysql:
     image: mysql
-#    ports:
-#      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456hk
       MYSQL_DATABASE: spending
