@@ -14,7 +14,7 @@ class Production(BaseConfig):
     DEBUG = False
     STAGE = 'production'
 
-    # service 激活定时任务api
+    # 服务端 激活定时任务api
     SEND_EVERY_MOUTH_USER_SPENDING_URL = 'https://121.43.135.49/v1/service/send_every_mouth_user_spending'
     REDIS_HOST = 'redis'
 
