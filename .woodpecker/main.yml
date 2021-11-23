@@ -20,7 +20,7 @@ pipeline:
     registry: 172.21.0.1:5000
     repo: 172.21.0.1:5000/spending
     tags:
-      - v1
+      - latest
     when:
       event: tag
 
