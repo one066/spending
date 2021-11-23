@@ -6,7 +6,6 @@ pipeline:
       - git config --global http.proxy 'socks5://127.0.0.1:1080'
       - git config --global https.proxy 'socks5://127.0.0.1:1080'
 
-
   lint:
     image: 127.0.0.1:5000/lint:v1
     commands:
