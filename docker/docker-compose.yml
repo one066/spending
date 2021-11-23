@@ -2,7 +2,7 @@ version: "3.3"
 services:
   spending:
     restart: always
-    image: 47.97.254.68:5000/spending:v1
+    image: 47.97.254.68:5000/spending:latest
     build: ../
     volumes:
       - ../src:/app
