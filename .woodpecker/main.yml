@@ -24,7 +24,7 @@ pipeline:
     tags:
       - latest
     when:
-      event: tag
+      event: push
 
   web_hook:
     image: plugins/webhook
@@ -32,4 +32,4 @@ pipeline:
       - http://121.43.135.49:8009/web_hook/accept?spending
     method: GET
     when:
-      event: tag
+      event: push
