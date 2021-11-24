@@ -16,15 +16,15 @@ pipeline:
     - yapf -dr . | (! grep '.')
     - isort . --check-only --diff
 
-  build_docker_image:
-    image: plugins/docker
-    insecure: true
-    registry: 172.21.0.1:5000
-    repo: 172.21.0.1:5000/spending
-    tags:
-      - latest
-    when:
-      event: push
+#  build_docker_image:
+#    image: plugins/docker
+#    insecure: true
+#    registry: 172.21.0.1:5000
+#    repo: 172.21.0.1:5000/spending
+#    tags:
+#      - latest
+#    when:
+#      event: push
 
   web_hook:
     image: plugins/webhook
