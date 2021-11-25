@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for
 
-from apps.back_end.models import RecordSpending
+from apps.spending.models import RecordSpending
 from extension.flask.api import v1
 
 front_end_views = Blueprint('front_end_views',

@@ -1,8 +1,8 @@
 import pandas as pd
 from flask import Blueprint, jsonify
 
-from apps.back_end.models import RecordSpending, User
-from apps.back_end.validator import PieValidator, StatusValidator
+from apps.spending.models import RecordSpending, User
+from apps.spending.validator import PieValidator, StatusValidator
 from extension.flask import class_route
 from extension.flask.base_views import BaseView
 from extension.mysql_client import db

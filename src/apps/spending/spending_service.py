@@ -3,8 +3,8 @@ import uuid
 
 from flask import Blueprint, jsonify
 
-from apps.back_end.models import RecordSpending, User
-from apps.back_end.validator import AddSpendingValidator, LoginValidator
+from apps.spending.models import RecordSpending, User
+from apps.spending.validator import AddSpendingValidator, LoginValidator
 from extension.flask import class_route
 from extension.flask.api import login_check, ok_response
 from extension.flask.base_views import BaseView
@@ -12,10 +12,10 @@ from extension.mysql_client import db
 from extension.redis_client import redis_client
 from SDK.email import OneEmail
 
-home_view = Blueprint('home_view', __name__, url_prefix='/v1/service')
+spending_service = Blueprint('spending_service', __name__, url_prefix='/v1/service')
 
 
-@class_route(home_view, '/login_check')
+@class_route(spending_service, '/login_check')
 class LoginCheck(BaseView):
     validator = LoginValidator
 
@@ -40,7 +40,7 @@ class LoginCheck(BaseView):
         return jsonify({'login': False})
 
 
-@class_route(home_view, '/add_spending')
+@class_route(spending_service, '/add_spending')
 class AddSpending(BaseView):
     validator = AddSpendingValidator
 
