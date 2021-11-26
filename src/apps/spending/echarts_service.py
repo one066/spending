@@ -2,9 +2,12 @@ import pandas as pd
 from flask import Blueprint, jsonify
 
 from apps.spending.models import RecordSpending, User
-from apps.spending.validator import PieValidator, StatusValidator
+from apps.spending.validator import (LineDataSerialize, PieDataSerialize,
+                                     PieValidator, ShowSpendingSerialize,
+                                     StatusSerialize, StatusValidator,
+                                     UsersSerialize)
 from extension.flask import class_route
-from extension.flask.base_views import BaseView
+from extension.flask.views import GetView
 from extension.mysql_client import db
 from SDK.email import OneEmail, get_title
 
@@ -14,64 +17,75 @@ echarts_service = Blueprint('echarts_service',
 
 
 @class_route(echarts_service, '/show_spending')
-class ShowSpending(BaseView):
+class ShowSpending(GetView):
 
-    validator = PieValidator
+    validated_class = PieValidator
+    serialize_class = ShowSpendingSerialize
 
-    def get(self, *arg, **kwargs):
-        request_data = self.get_request_data_v1(kwargs)
+    def action(self, *arg, **kwargs):
         _record_spending = RecordSpending.query.filter_by(
-            status=request_data['status']).all()
+            status=self.validated_data['status']).all()
 
         RecordSpending.query.filter(RecordSpending.status is None).update(
             {'status': '暂无'})
-        return jsonify(
-            {'data': [record.show() for record in _record_spending]})
+
+        return {'data': [record.show() for record in _record_spending]}
 
 
 @class_route(echarts_service, '/pie_data')
-class PieData(BaseView):
+class PieData(GetView):
 
-    validator = StatusValidator
+    validated_class = StatusValidator
+    serialize_class = PieDataSerialize
 
-    def get(self, *arg, **kwargs):
-        request_data = self.get_request_data_v1(kwargs)
-        return jsonify(RecordSpending.get_pie_dates(request_data['status']))
+    def action(self, *arg, **kwargs):
+
+        return {
+            'data': RecordSpending.get_pie_dates(self.validated_data['status'])
+        }
 
 
 @class_route(echarts_service, '/get_names')
-class GetNames(BaseView):
-    def get(self):
-        return jsonify(RecordSpending.get_users())
+class GetNames(GetView):
+
+    serialize_class = UsersSerialize
+
+    def action(self):
+        return {'names': RecordSpending.get_users()}
 
 
 @class_route(echarts_service, '/get_status')
-class GetStatus(BaseView):
-    def get(self):
+class GetStatus(GetView):
+
+    serialize_class = StatusSerialize
+
+    def action(self):
         status = RecordSpending.get_status()
         status.remove('暂无')
-        return jsonify(status)
+        return {'status': status}
 
 
 @class_route(echarts_service, '/line_data')
-class LineData(BaseView):
-    validator = StatusValidator
+class LineData(GetView):
 
-    def get(self, *arg, **kwargs):
-        request_data = self.get_request_data_v1(kwargs)
+    validated_class = StatusValidator
+    serialize_class = LineDataSerialize
+
+    def action(self, *arg, **kwargs):
         dates = RecordSpending.get_dates()
         users = RecordSpending.get_users()
-        series = RecordSpending.get_line_dates(request_data['status'])
-        return jsonify({
+        series = RecordSpending.get_line_dates(self.validated_data['status'])
+
+        return {
             'dates': dates,
             'users': users,
             'series': series,
-        })
+        }
 
 
 @class_route(echarts_service, '/send_every_mouth_user_spending')
-class SendEveryMouthUserSpending(BaseView):
-    def get(self):
+class SendEveryMouthUserSpending(GetView):
+    def action(self):
         user_data = db.session.query(
             RecordSpending.title, RecordSpending.people, RecordSpending.price,
             RecordSpending.start_time).filter_by(status='暂无').all()
@@ -89,4 +103,4 @@ class SendEveryMouthUserSpending(BaseView):
         RecordSpending.query.filter(RecordSpending.status == '暂无').update(
             {'status': title})
         db.session.commit()
-        return jsonify('ok')
+        return

@@ -54,13 +54,11 @@
             $('#title').val("");
             if (!price || !title) {
                 alert('信息不能为空')
-            } else if (price <= 0) {
-                alert('md 填正数')
             } else {
                 var Obj = {'price': price, 'title': title};
                 console.log(Obj)
                 $.ajax({
-                    url: "{{ url_for('home_view.AddSpending') }}",
+                    url: "{{ url_for('spending_service.AddSpending') }}",
                     type: 'POST',
                     data: JSON.stringify(Obj),
                     contentType: 'application/json',
@@ -69,10 +67,7 @@
                     },
                     crossDomain: true,
                     success: function (data) {
-                        if (data.valueOf()['redirect_login']) {
-                            alert('重新登录');
-                            window.location.href = "{{ url_for('front_end_views.login') }}";
-                        } else if( !data.valueOf()['ok']) {
+                        if( !data.valueOf()['ok']) {
                             alert('添加失败：' + data.valueOf()['error_type'])
                         }
                         else {
@@ -133,11 +128,7 @@
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {
-                    if (result_data.valueOf()['redirect_login']) {
-                            alert('重新登录');
-                            window.location.href = "{{ url_for('front_end_views.login') }}";
-                    } else {
-                        myChart.setOption({
+                    myChart.setOption({
                             series: [
                                 {
                                   name: '开支情况',
@@ -163,12 +154,12 @@
                                   labelLine: {
                                     show: false
                                   },
-                                    data: result_data.valueOf()
+                                    data: result_data.valueOf()['data']
                                 }
                               ]
 
                         })
-                    }
+
                 },
                 error: function (e) {
                     alert("失败！！");
