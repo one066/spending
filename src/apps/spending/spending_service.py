@@ -28,9 +28,13 @@ class LoginCheck(PostView):
         user = User.query.filter_by(name=name).first()
 
         if user.login(password):
+            token = redis_client.get(name)
 
-            token = uuid.uuid4().hex
-            redis_client.set(name, token)
+            if token:
+                token = token.decode()
+            else:
+                token = uuid.uuid4().hex
+                redis_client.set(name, token)
 
             return {
                 'login': True,
