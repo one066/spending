@@ -9,10 +9,10 @@ clone:
 #      - DRONE_COMMIT_SHA=${DRONE_COMMIT_SHA}
 #      - DRONE_COMMIT_REF=${DRONE_COMMIT_REF}
 #    network: "host"
-    commands:
-      - git config --global http.version HTTP/1.1
-      - git config --global http.proxy 'http://127.0.0.1:1087'
-      - git config --global https.proxy 'https://127.0.0.1:1087'
+#    commands:
+#      - git config --global http.version HTTP/1.1
+#      - git config --global http.proxy 'http://127.0.0.1:1087'
+#      - git config --global https.proxy 'https://127.0.0.1:1087'
 
 pipeline:
 
