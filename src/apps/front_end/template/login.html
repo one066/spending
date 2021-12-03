@@ -85,8 +85,8 @@
                         $.cookie("token", null, {expires: -1});
 
                         console.log(data.valueOf()['result']['name']);
-                        $.cookie('name', data.valueOf()['result']['name'], {expires: 30, path: '/'});
-                        $.cookie('token', data.valueOf()['result']['token'], {expires: 30, path: '/'});
+                        $.cookie('name', data.valueOf()['result']['name']);
+                        $.cookie('token', data.valueOf()['result']['token']);
                         window.location.href = "{{ url_for('front_end_views.home') }}";
                     }
                 },
