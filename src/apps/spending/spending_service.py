@@ -31,8 +31,6 @@ class LoginCheck(PostView):
 
             token = uuid.uuid4().hex
             redis_client.set(name, token)
-            # 保留一个星期
-            redis_client.expire(name, 60 * 60 * 24 * 7)
 
             return {
                 'login': True,
