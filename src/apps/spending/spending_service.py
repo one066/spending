@@ -55,6 +55,7 @@ class AddSpending(PostView):
         name = self.get_name()
         if not name:
             return failed_response('cookie', 'not name')
+
         _record_spending = RecordSpending(id=spending_id,
                                           start_time=start_time,
                                           title=self.validated_data['title'],
