@@ -75,7 +75,7 @@ class APIBaseView(MethodView):
 
     @classmethod
     def get_name(cls):
-        print('*'* 100, flush=True)
+        print('*' * 100, flush=True)
         print(request.cookie, flush=True)
         return request.cookies.get('name')
 
