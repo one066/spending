@@ -55,17 +55,18 @@ class AddSpending(PostView):
         name = self.get_name()
         if not name:
             return failed_response('cookie', 'not name')
-        # _record_spending = RecordSpending(id=spending_id,
-        #                                   start_time=start_time,
-        #                                   title=self.validated_data['title'],
-        #                                   price=self.validated_data['price'],
-        #                                   people=self.get_name(),
-        #                                   status='暂无')
-        #
-        # db.session.add(_record_spending)
-        # db.session.commit()
-        #
-        # # 向成员发送消息
-        # OneEmail().send_pending(users=User.emails(),
-        #                         record_spending=_record_spending.show())
+
+        _record_spending = RecordSpending(id=spending_id,
+                                          start_time=start_time,
+                                          title=self.validated_data['title'],
+                                          price=self.validated_data['price'],
+                                          people=self.get_name(),
+                                          status='暂无')
+
+        db.session.add(_record_spending)
+        db.session.commit()
+
+        # 向成员发送消息
+        OneEmail().send_pending(users=User.emails(),
+                                record_spending=_record_spending.show())
         return
