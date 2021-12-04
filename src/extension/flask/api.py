@@ -77,7 +77,7 @@ class APIBaseView(MethodView):
     def get_name(cls):
         print('*'*100, flush=True)
         print(request.cookie, flush=True)
-        return request.cookies.get('name', 'x')
+        return request.cookies.get('name')
 
     def dispatch_request(self, *args, **kwargs):
         try:
