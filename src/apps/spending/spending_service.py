@@ -7,6 +7,7 @@ from apps.spending.models import RecordSpending, User
 from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
                                      LoginValidator)
 from extension.flask import class_route
+from extension.flask.api import failed_response
 from extension.flask.views import PostView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
@@ -51,18 +52,20 @@ class AddSpending(PostView):
     def action(self, *args, **kwargs):
         spending_id = uuid.uuid4().hex
         start_time = datetime.datetime.now().isoformat()
-
-        _record_spending = RecordSpending(id=spending_id,
-                                          start_time=start_time,
-                                          title=self.validated_data['title'],
-                                          price=self.validated_data['price'],
-                                          people=self.get_name(),
-                                          status='暂无')
-
-        db.session.add(_record_spending)
-        db.session.commit()
-
-        # 向成员发送消息
-        OneEmail().send_pending(users=User.emails(),
-                                record_spending=_record_spending.show())
+        name = self.get_name()
+        if not name:
+            return failed_response('cookie', 'not name')
+        # _record_spending = RecordSpending(id=spending_id,
+        #                                   start_time=start_time,
+        #                                   title=self.validated_data['title'],
+        #                                   price=self.validated_data['price'],
+        #                                   people=self.get_name(),
+        #                                   status='暂无')
+        #
+        # db.session.add(_record_spending)
+        # db.session.commit()
+        #
+        # # 向成员发送消息
+        # OneEmail().send_pending(users=User.emails(),
+        #                         record_spending=_record_spending.show())
         return

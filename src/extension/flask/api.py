@@ -22,18 +22,6 @@ def failed_response(error_type, error_message):
     return jsonify(body)
 
 
-def v1(view):
-    """
-    view or func check
-    """
-    @wraps(view)
-    def decorator(*args, **kwargs):
-        # 进行检查操作
-        return view(*args, **kwargs)
-
-    return decorator
-
-
 def class_route(blueprint: Blueprint, rule, **options):
     """class view 的路由
     """
@@ -87,7 +75,9 @@ class APIBaseView(MethodView):
 
     @classmethod
     def get_name(cls):
-        return request.cookies.get('name', 'x')
+        print('*' * 100, flush=True)
+        print(request.cookie, flush=True)
+        return request.cookies.get('name')
 
     def dispatch_request(self, *args, **kwargs):
         try:
