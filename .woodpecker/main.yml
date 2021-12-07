@@ -1,19 +1,15 @@
-#clone:
-#  git:
-#    # 可以自定义
-#    image: woodpeckerci/plugin-git
+clone:
+  git:
+    image: 127.0.0.1:5000/ci-git
 
 pipeline:
-  clone:
-    image: woodpeckerci/plugin-git
-    commands:
-      - git config --global http.version HTTP/1.1
 
   lint:
     image: 127.0.0.1:5000/lint:v1
     commands:
-    - cd src
+    - pwd
     - ls -al
+    - cd src
     - yapf -dr . | (! grep '.')
     - isort . --check-only --diff
 
@@ -33,4 +29,5 @@ pipeline:
       - http://121.43.135.49:8009/web_hook/accept?name=spending
     method: GET
     when:
+
       event: tag
