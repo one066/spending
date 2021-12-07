@@ -18,5 +18,5 @@ class Production(BaseConfig):
     SEND_EVERY_MOUTH_USER_SPENDING_URL = 'https://121.43.135.49/v1/service/send_every_mouth_user_spending'
     REDIS_HOST = 'redis'
 
-    # docker-compose mysql database url
+    # mysql database url
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456hk@mysql:3306/spending?charset=utf8'
