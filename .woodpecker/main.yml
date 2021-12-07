@@ -9,6 +9,7 @@ clone:
 
 
 pipeline:
+
 #  clone:
 #    image: woodpeckerci/plugin-git
 #    commands:
