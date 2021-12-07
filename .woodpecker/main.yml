@@ -5,7 +5,7 @@ clone:
     environment:
       - CI_COMMIT_TARGET_BRANCH=${CI_COMMIT_TARGET_BRANCH}
       - CI_REPO_REMOTE=${CI_REPO_REMOTE}
-    wok
+
 
 pipeline:
 #  clone:
