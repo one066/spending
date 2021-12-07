@@ -17,6 +17,7 @@ pipeline:
   lint:
     image: 127.0.0.1:5000/lint:v1
     commands:
+    - pwd
     - ls -al
     - cd src
     - yapf -dr . | (! grep '.')
