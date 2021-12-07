@@ -1,19 +1,24 @@
-#clone:
-#  git:
-#    # 可以自定义
-#    image: woodpeckerci/plugin-git
+clone:
+  git:
+    # 可以自定义
+    image: one/git
+    environment:
+      - CI_COMMIT_TARGET_BRANCH=${CI_COMMIT_TARGET_BRANCH}
+      - CI_REPO_REMOTE=${CI_REPO_REMOTE}
+
 
 pipeline:
-  clone:
-    image: woodpeckerci/plugin-git
-    commands:
-      - git config --global http.version HTTP/1.1
+
+#  clone:
+#    image: woodpeckerci/plugin-git
+#    commands:
+#      - git config --global http.version HTTP/1.1
 
   lint:
     image: 127.0.0.1:5000/lint:v1
     commands:
-    - cd src
     - ls -al
+    - cd src
     - yapf -dr . | (! grep '.')
     - isort . --check-only --diff
 
