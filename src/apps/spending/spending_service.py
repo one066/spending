@@ -24,7 +24,9 @@ class LoginCheck(PostView):
     serialize_class = LoginSerialize
 
     def action(self):
-        name = self.validated_data['name']
+        name = self.validated_data[
+            'name'
+        ]
         password = self.validated_data['password']
         user = User.query.filter_by(name=name).first()
 

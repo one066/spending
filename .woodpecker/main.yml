@@ -4,11 +4,6 @@ clone:
 
 pipeline:
 
-#  clone:
-#    image: woodpeckerci/plugin-git
-#    commands:
-#      - git config --global http.version HTTP/1.1
-
   lint:
     image: 127.0.0.1:5000/lint:v1
     commands:
