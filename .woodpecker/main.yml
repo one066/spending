@@ -5,8 +5,8 @@ clone:
 #    environment:
 #      - CI_COMMIT_TARGET_BRANCH=v1_test
 #      - CI_REPO_REMOTE=https://github.com/one066/spending
-    commands:
-      - echo $${CI_COMMIT_TARGET_BRANCH}
+#    commands:
+#      - echo $CI_COMMIT_TARGET_BRANCH
 
 
 pipeline:
