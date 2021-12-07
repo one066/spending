@@ -3,8 +3,8 @@ clone:
     # 可以自定义
     image: 127.0.0.1:5000/ci-git
     settings:
-      tagget_branch: ${CI_COMMIT_TARGET_BRANCH}
-      repo_remote: ${CI_REPO_REMOTE}
+      tagget_branch: $CI_COMMIT_TARGET_BRANCH
+      repo_remote: $CI_REPO_REMOTE
 #    commands:
 #      - echo $CI_COMMIT_TARGET_BRANCH
 
