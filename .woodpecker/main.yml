@@ -6,7 +6,7 @@ clone:
       - CI_COMMIT_TARGET_BRANCH=${CI_COMMIT_TARGET_BRANCH}
       - CI_REPO_REMOTE=${CI_REPO_REMOTE}
     commands:
-      - echo ${CI_COMMIT_TARGET_BRANCH}
+      - echo $CI_COMMIT_TARGET_BRANCH
 
 
 pipeline:
