@@ -24,7 +24,8 @@ class ShowSpending(GetView):
 
     def action(self, *arg, **kwargs):
         _record_spending = RecordSpending.query.filter_by(
-            status=self.validated_data['status']).order_by(RecordSpending.start_time.desc()).all()
+            status=self.validated_data['status']).order_by(
+                RecordSpending.start_time.desc()).all()
         return {'data': [record.show() for record in _record_spending]}
 
 
