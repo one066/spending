@@ -61,7 +61,8 @@ class GetStatus(GetView):
 
     def action(self):
         status = RecordSpending.get_status()
-        status.remove('暂无')
+        if '暂无' in status:
+            status.remove('暂无')
         return {'status': status}
 
 
