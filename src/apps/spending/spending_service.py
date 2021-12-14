@@ -8,6 +8,7 @@ from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
                                      LoginValidator)
 from extension.flask import class_route
 from extension.flask.api import failed_response
+from extension.flask.exceptions import TokenFailed
 from extension.flask.views import PostView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
@@ -54,7 +55,7 @@ class AddSpending(PostView):
         start_time = datetime.datetime.now().isoformat()
         name = self.get_name()
         if not name:
-            return failed_response('cookie', 'not name')
+            raise TokenFailed
 
         _record_spending = RecordSpending(id=spending_id,
                                           start_time=start_time,

@@ -40,5 +40,5 @@ class BaseConfig(object):
     MAIL_USE_TLS = False
     MAIL_DEBUG = True
     MAIL_USERNAME = '2531210067@qq.com'
-    MAIL_PASSWORD = 'hivzkwegzwytecja'
+    MAIL_PASSWORD = 'whynsqohaezzdjdh'
     MAIL_ASCII_ATTACHMENTS = True
