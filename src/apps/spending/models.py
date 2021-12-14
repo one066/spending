@@ -20,8 +20,9 @@ class RecordSpending(db.Model):
     @classmethod
     def get_dates(cls, status):
         dates = db.session.query(
-            func.date_format(cls.start_time,
-                             '%Y-%m-%d').label('date')).group_by('date').filter(
+            func.date_format(
+                cls.start_time,
+                '%Y-%m-%d').label('date')).group_by('date').filter(
                     cls.status == status).order_by(cls.start_time.asc()).all()
         return [date[0] for date in dates]
 
@@ -35,7 +36,7 @@ class RecordSpending(db.Model):
         users = db.session.query(
             cls.status, cls.people,
             func.sum(cls.price).label('value')).group_by(
-            cls.people, cls.status).having(cls.status == status).all()
+                cls.people, cls.status).having(cls.status == status).all()
         return [{
             'name': user.people,
             'value': '%.2f' % user.value
@@ -50,7 +51,7 @@ class RecordSpending(db.Model):
                 records = cls.query.filter(
                     cls.status == status, cls.people == user,
                     cls.start_time.like(f'{date}%')).order_by(
-                    cls.start_time.desc()).all()
+                        cls.start_time.desc()).all()
                 user_data.append(0 if not records else sum(
                     [float('%.2f' % record.price) for record in records]))
             series.append({
