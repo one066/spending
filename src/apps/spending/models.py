@@ -18,15 +18,12 @@ class RecordSpending(db.Model):
         return [self.people, self.title, self.price, start_time, self.id]
 
     @classmethod
-    def get_users(cls):
-        users = [record_spending.people for record_spending in cls.query.all()]
-        return list(set(users))
-
-    @classmethod
-    def get_dates(cls):
+    def get_dates(cls, status):
         dates = db.session.query(
-            func.date_format(cls.start_time,
-                             '%Y-%m-%d').label('date')).group_by('date').all()
+            func.date_format(
+                cls.start_time,
+                '%Y-%m-%d').label('date')).group_by('date').filter(
+                    cls.status == status).order_by(cls.start_time.asc()).all()
         return [date[0] for date in dates]
 
     @classmethod
@@ -48,13 +45,13 @@ class RecordSpending(db.Model):
     @classmethod
     def get_line_dates(cls, status):
         series = []
-        for user in cls.get_users():
+        for user in User.names():
             user_data = []
-            for date in cls.get_dates():
+            for date in cls.get_dates(status):
                 records = cls.query.filter(
                     cls.status == status, cls.people == user,
                     cls.start_time.like(f'{date}%')).order_by(
-                        RecordSpending.start_time.desc()).all()
+                        cls.start_time.desc()).all()
                 user_data.append(0 if not records else sum(
                     [float('%.2f' % record.price) for record in records]))
             series.append({
@@ -80,3 +77,7 @@ class User(db.Model):
     @classmethod
     def emails(cls):
         return [user.email for user in cls.query.all()]
+
+    @classmethod
+    def names(cls):
+        return [user.name for user in cls.query.all()]

@@ -1,11 +1,10 @@
 import pandas as pd
-from flask import Blueprint, jsonify
+from flask import Blueprint
 
 from apps.spending.models import RecordSpending, User
 from apps.spending.validator import (LineDataSerialize, PieDataSerialize,
                                      PieValidator, ShowSpendingSerialize,
-                                     StatusSerialize, StatusValidator,
-                                     UsersSerialize)
+                                     StatusSerialize, StatusValidator)
 from extension.flask import class_route
 from extension.flask.views import GetView
 from extension.mysql_client import db
@@ -42,15 +41,6 @@ class PieData(GetView):
         }
 
 
-@class_route(echarts_service, '/get_names')
-class GetNames(GetView):
-
-    serialize_class = UsersSerialize
-
-    def action(self):
-        return {'names': RecordSpending.get_users()}
-
-
 @class_route(echarts_service, '/get_status')
 class GetStatus(GetView):
 
@@ -70,8 +60,8 @@ class LineData(GetView):
     serialize_class = LineDataSerialize
 
     def action(self, *arg, **kwargs):
-        dates = RecordSpending.get_dates()
-        users = RecordSpending.get_users()
+        dates = RecordSpending.get_dates(self.validated_data['status'])
+        users = User.names()
         series = RecordSpending.get_line_dates(self.validated_data['status'])
 
         return {
