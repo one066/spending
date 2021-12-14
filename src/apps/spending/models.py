@@ -53,7 +53,7 @@ class RecordSpending(db.Model):
             for date in cls.get_dates():
                 records = cls.query.filter(
                     cls.status == status, cls.people == user,
-                    cls.start_time.like(f'{date}%')).all()
+                    cls.start_time.like(f'{date}%')).order_by(RecordSpending.start_time.desc()).all()
                 user_data.append(0 if not records else sum(
                     [float('%.2f' % record.price) for record in records]))
             series.append({

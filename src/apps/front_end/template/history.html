@@ -29,10 +29,9 @@
             contentType: 'application/json',
             success: function (data) {
                 for (var i=0; i<data['status'].length; i++){
-
-                    $("#history").html("<a href='{{ url_for('front_end_views.show') }}?status="
+                    $("#history").append("<a href='{{ url_for('front_end_views.show') }}?status="
                         +data['status'][i] +"'><button class='btn btn-success'>"
-                        + data['status'][i] + "</button></a>")
+                        + data['status'][i] + "</button></a></br></br>")
                 }
             },
             error: function (e) {
