@@ -26,6 +26,7 @@ body {
   position: relative;
   width: 400px;
   height: 475px;
+  top: 20%;
   margin: auto;
   z-index: -2;
   overflow: hidden;
