@@ -33,6 +33,8 @@ pipeline:
     playbook: deploy/playbook.yml
     inventory: deploy/one_hosts.yml
     flush_cache: true
+    timeout: 10000
+    diff: teue
     commands:
     - sleep 1000
 
