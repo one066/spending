@@ -1,0 +1,7 @@
+all:
+  hosts:
+    one:
+      ansible_host: 121.43.135.49
+      use_role: one
+      stage: production
+      project: spending
