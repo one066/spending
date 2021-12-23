@@ -33,7 +33,6 @@ pipeline:
     playbook: deploy/playbook.yml
     inventory: deploy/one_hosts.yml
     flush_cache: true
-    command: sleep 999999999
 
   web_hook:
     image: plugins/webhook
