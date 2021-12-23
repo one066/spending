@@ -34,7 +34,7 @@ pipeline:
     inventory: deploy/one_hosts.yml
     flush_cache: true
     timeout: 10000
-    diff: teue
+    diff: true
     commands:
     - sleep 1000
 
