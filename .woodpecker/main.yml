@@ -27,7 +27,6 @@ pipeline:
     image: plugins/ansible
     environment:
       ANSIBLE_JINJA2_EXTENSIONS: jinja2.ext.loopcontrols
-    user: root
     secrets:
     - source: aliyun_ssh_key
       target: ansible_private_key
