@@ -35,8 +35,6 @@ pipeline:
     flush_cache: true
     timeout: 10000
     diff: true
-    commands:
-    - sleep 1000
 
   web_hook:
     image: plugins/webhook
