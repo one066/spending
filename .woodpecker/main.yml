@@ -20,8 +20,8 @@ pipeline:
     repo: 172.21.0.1:5000/spending
     tags:
       - latest
-#    when:
-#      event: tag
+    when:
+      event: tag
 
   deploy_by_push_master:
     image: plugins/ansible
@@ -33,13 +33,5 @@ pipeline:
     playbook: deploy/playbook.yml
     inventory: deploy/one_hosts.yml
     flush_cache: true
-#    when:
-#      event: tag
-
-  web_hook:
-    image: plugins/webhook
-    urls:
-      - http://121.43.135.49:8009/web_hook/accept?name=spending
-    method: GET
     when:
       event: tag
