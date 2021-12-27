@@ -4,18 +4,18 @@
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: down_info
-  ignore_errors: True
+- debug: var=down_info.stdout verbosity=0
 
 - name: docker-compose rmi
   command: docker rmi 47.97.254.68:5000/{{ project }}:latest
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: rmi_info
-  ignore_errors: True
+- debug: var=rmi_info.stdout verbosity=0
 
 - name: docker-compose up
   command: docker-compose up -d
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: up_info
-  ignore_errors: True
+- debug: var=up_info.stdout verbosity=0
