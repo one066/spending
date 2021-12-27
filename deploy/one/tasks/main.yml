@@ -1,6 +1,6 @@
 ---
 - name: test
-  command: ls -a
+  shell: ls -a
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: down_info

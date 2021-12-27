@@ -41,4 +41,3 @@ pipeline:
     method: GET
     when:
       event: tag
-
