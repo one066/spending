@@ -35,7 +35,7 @@ pipeline:
 #    flush_cache: true
 
   deploy_by_push_master:
-    image: alpine:latest
+    image: alpine
     commands:
       echo "${aliyun_ssh_key}"
       echo "$${aliyun_ssh_key}"
