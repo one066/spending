@@ -23,17 +23,22 @@ pipeline:
     when:
       event: tag
 
-  deploy_by_push_master:
-    image: plugins/ansible
-    environment:
-      ANSIBLE_JINJA2_EXTENSIONS: jinja2.ext.loopcontrols
+#  deploy_by_push_master:
+#    image: plugins/ansible
+#    environment:
+#      ANSIBLE_JINJA2_EXTENSIONS: jinja2.ext.loopcontrols
 #    secrets:
 #    - source: aliyun_ssh_key
 #      target: ansible_private_key
-    private_key: $${ALIYUN_SSH_KEY}
-    playbook: deploy/playbook.yml
-    inventory: deploy/one_hosts.yml
-    flush_cache: true
+#    playbook: deploy/playbook.yml
+#    inventory: deploy/one_hosts.yml
+#    flush_cache: true
+
+  deploy_by_push_master:
+    image: alpine:latest
+    commands:
+      echo "${aliyun_ssh_key}"
+      echo "$${aliyun_ssh_key}"
 
   web_hook:
     image: plugins/webhook
