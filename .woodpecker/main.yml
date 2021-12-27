@@ -36,8 +36,9 @@ pipeline:
 
   deploy_by_push_master:
     image: alpine
+    secrets: [ aliyun_ssh_key ]
     commands:
-      echo "${CI_COMMIT_TAG}"
+    - echo $ALIYUN_SSH_KEY
 
   web_hook:
     image: plugins/webhook
