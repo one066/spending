@@ -23,6 +23,17 @@ pipeline:
     when:
       event: tag
 
+  deploy_by_push_master:
+    image: plugins/ansible
+    environment:
+      ANSIBLE_JINJA2_EXTENSIONS: jinja2.ext.loopcontrols
+    secrets:
+    - source: aliyun_ssh_key
+      target: ansible_private_key
+    playbook: deploy/playbook.yml
+    inventory: deploy/one_hosts.yml
+    flush_cache: true
+
   web_hook:
     image: plugins/webhook
     urls:
