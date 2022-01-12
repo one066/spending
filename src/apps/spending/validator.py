@@ -26,7 +26,7 @@ class PieValidator(Schema):
     _ = fields.Str(required=True)
 
 
-class PieDataSerialize(Schema):
+class SpendingGroupByUserSerialize(Schema):
     data = fields.List(fields.Dict)
 
 

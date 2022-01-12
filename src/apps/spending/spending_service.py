@@ -51,23 +51,29 @@ class AddSpending(PostView):
     validated_class = AddSpendingValidator
 
     def action(self, *args, **kwargs):
-        spending_id = uuid.uuid4().hex
-        start_time = datetime.datetime.now().isoformat()
         name = self.get_name()
         if not name:
             raise TokenFailed
 
-        _record_spending = RecordSpending(id=spending_id,
-                                          start_time=start_time,
-                                          title=self.validated_data['title'],
-                                          price=self.validated_data['price'],
-                                          people=self.get_name(),
-                                          status='暂无')
+        title = self.validated_data['title']
+        price = self.validated_data['price']
+
+        # 添加开支
+        _record_spending = RecordSpending(
+            id=uuid.uuid4().hex,
+            start_time=datetime.datetime.now().isoformat(),
+            title=title,
+            price=price,
+            people=name,
+            status='暂无')
 
         db.session.add(_record_spending)
         db.session.commit()
 
         # 向成员发送消息
-        OneEmail().send_pending(users=User.emails(),
-                                record_spending=_record_spending.show())
+        one_email = OneEmail()
+        one_email.add_message(subject="外滩405 开支",
+                              recipients=User.emails(),
+                              body=f'{name} 刚刚消费了\n {title} : {price}元')
+        one_email.send()
         return

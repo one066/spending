@@ -24,7 +24,7 @@
         var history = document.getElementById("history");
         $(document).ready(function() {
             $.ajax({
-            url: "{{ url_for('echarts_service.GetStatus') }}",
+            url: "{{ url_for('echarts_service.Status') }}",
             type: 'GET',
             contentType: 'application/json',
             success: function (data) {
