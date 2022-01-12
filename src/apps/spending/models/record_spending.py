@@ -25,15 +25,14 @@ class RecordSpending(db.Model):
         group_spending = db.session.query(
             cls.status, cls.people,
             func.sum(cls.price).label('value')).group_by(
-            cls.people, cls.status).having(cls.status == status).all()
+                cls.people, cls.status).having(cls.status == status).all()
 
         return group_spending
 
     @classmethod
     def get_time_desc_spending(cls, status) -> List:
         """通过 status 的到降序的开支列表"""
-        return cls.query.filter_by(
-            status=status).order_by(
+        return cls.query.filter_by(status=status).order_by(
             cls.start_time.desc()).all()
 
     @classmethod

@@ -7,8 +7,6 @@ from sqlalchemy.engine import Row
 
 from apps.spending.models.record_spending import RecordSpending as Rs
 from apps.spending.models.user import User
-
-
 from apps.spending.util import build_every_mouth_body, get_now_mouth_title
 from apps.spending.validator import (LineDataSerialize, PieValidator,
                                      ShowSpendingSerialize,
