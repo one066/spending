@@ -198,7 +198,7 @@
       },
     };
         $.ajax({
-        url: "{{ url_for('echarts_service.LineData') }}?status=" + status,
+        url: "{{ url_for('echarts_service.UserSpendingByDate') }}?status=" + status,
         type: 'GET',
         contentType: 'application/json',
         success: function (result_data) {
