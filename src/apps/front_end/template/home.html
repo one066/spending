@@ -124,7 +124,7 @@
           ]
         };
         $.ajax({
-                url: "{{ url_for('echarts_service.PieData') }}?status=暂无",
+                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=暂无",
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {

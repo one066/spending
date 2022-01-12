@@ -125,7 +125,7 @@
           ]
         };
         $.ajax({
-                url: "{{ url_for('echarts_service.PieData') }}?status=" + status,
+                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=" + status,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {

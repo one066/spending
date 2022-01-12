@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import func
 
 from extension.mysql_client import db
@@ -13,54 +15,17 @@ class RecordSpending(db.Model):
     people = db.Column(db.String(10), nullable=True)
     status = db.Column(db.String(50))
 
-    def show(self):
+    def show(self) -> List:
         start_time = self.start_time[5:16]
         return [self.people, self.title, self.price, start_time, self.id]
 
     @classmethod
-    def get_dates(cls, status):
-        dates = db.session.query(
-            func.date_format(
-                cls.start_time,
-                '%Y-%m-%d').label('date')).group_by('date').filter(
-                    cls.status == status).order_by(cls.start_time.asc()).all()
-        return [date[0] for date in dates]
-
-    @classmethod
-    def get_status(cls):
-        status = db.session.query(cls.status).group_by(cls.status).all()
-        return [st[0] for st in status]
-
-    @classmethod
-    def get_pie_dates(cls, status):
-        users = db.session.query(
+    def get_spending_group_by_user(cls, status) -> List:
+        group_spending = db.session.query(
             cls.status, cls.people,
             func.sum(cls.price).label('value')).group_by(
                 cls.people, cls.status).having(cls.status == status).all()
-        return [{
-            'name': user.people,
-            'value': '%.2f' % user.value
-        } for user in users]
-
-    @classmethod
-    def get_line_dates(cls, status):
-        series = []
-        for user in User.names():
-            user_data = []
-            for date in cls.get_dates(status):
-                records = cls.query.filter(
-                    cls.status == status, cls.people == user,
-                    cls.start_time.like(f'{date}%')).order_by(
-                        cls.start_time.desc()).all()
-                user_data.append(0 if not records else sum(
-                    [float('%.2f' % record.price) for record in records]))
-            series.append({
-                'name': user,
-                'type': 'line',
-                'stack': 'Total',
-                'data': user_data
-            })
-        return series
+        return group_spending
 
 
 class User(db.Model):
@@ -71,13 +36,13 @@ class User(db.Model):
     password = db.Column(db.String(50), nullable=True)
     email = db.Column(db.String(20), nullable=True)
 
-    def login(self, password):
+    def login(self, password) -> bool:
         return self.password == password
 
     @classmethod
-    def emails(cls):
+    def emails(cls) -> List[str]:
         return [user.email for user in cls.query.all()]
 
     @classmethod
-    def names(cls):
+    def names(cls) -> List[str]:
         return [user.name for user in cls.query.all()]
