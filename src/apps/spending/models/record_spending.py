@@ -21,28 +21,23 @@ class RecordSpending(db.Model):
 
     @classmethod
     def get_spending_group_by_user(cls, status) -> List:
+        """通过 status 对user spending 进行分组"""
         group_spending = db.session.query(
             cls.status, cls.people,
             func.sum(cls.price).label('value')).group_by(
-                cls.people, cls.status).having(cls.status == status).all()
+            cls.people, cls.status).having(cls.status == status).all()
+
         return group_spending
 
-
-class User(db.Model):
-    __tablename__ = 'user'
-
-    id = db.Column(db.String(32), nullable=True)
-    name = db.Column(db.String(50), nullable=True, primary_key=True)
-    password = db.Column(db.String(50), nullable=True)
-    email = db.Column(db.String(20), nullable=True)
-
-    def login(self, password) -> bool:
-        return self.password == password
+    @classmethod
+    def get_time_desc_spending(cls, status) -> List:
+        """通过 status 的到降序的开支列表"""
+        return cls.query.filter_by(
+            status=status).order_by(
+            cls.start_time.desc()).all()
 
     @classmethod
-    def emails(cls) -> List[str]:
-        return [user.email for user in cls.query.all()]
-
-    @classmethod
-    def names(cls) -> List[str]:
-        return [user.name for user in cls.query.all()]
+    def get_status(cls) -> List:
+        """得到所有 status"""
+        status = db.session.query(cls.status).group_by(cls.status).all()
+        return [_st.status for _st in status]

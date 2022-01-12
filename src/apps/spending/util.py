@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from dateutil.relativedelta import relativedelta
 
-from apps.spending.models import RecordSpending
+from apps.spending.models.record_spending import RecordSpending
 
 
 def get_now_mouth_title() -> str:

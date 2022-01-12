@@ -3,9 +3,12 @@ from typing import List
 import pandas as pd
 from flask import Blueprint
 from sqlalchemy import func
+from sqlalchemy.engine import Row
 
-from apps.spending.models import RecordSpending as Rs
-from apps.spending.models import User
+from apps.spending.models.record_spending import RecordSpending as Rs
+from apps.spending.models.user import User
+
+
 from apps.spending.util import build_every_mouth_body, get_now_mouth_title
 from apps.spending.validator import (LineDataSerialize, PieValidator,
                                      ShowSpendingSerialize,
@@ -27,10 +30,10 @@ class ShowSpending(GetView):
     serialize_class = ShowSpendingSerialize
 
     def action(self, *arg, **kwargs):
-        _record_spending = Rs.query.filter_by(
-            status=self.validated_data['status']).order_by(
-                Rs.start_time.desc()).all()
-        return {'data': [record.show() for record in _record_spending]}
+
+        all_spending = Rs.get_time_desc_spending(self.validated_data['status'])
+        # 通过 status 得到 所有开支，并时间降序
+        return {'data': [spending.show() for spending in all_spending]}
 
 
 @class_route(echarts_service, '/spending_group_by_user')
@@ -42,13 +45,14 @@ class SpendingGroupByUser(GetView):
         group_spending = Rs.get_spending_group_by_user(
             self.validated_data['status'])
 
-        # 满足 echart.js 参数条件
-        date = [{
-            'name': spending.people,
-            'value': '%.2f' % spending.value
-        } for spending in group_spending]
+        # 满足 echart.js 参数条件 people -> name
+        all_spending = []
+        for spending in group_spending:
+            spending = spending._asdict()
+            spending['name'] = spending.pop("people")
+            all_spending.append(spending)
 
-        return {'data': date}
+        return {'data': all_spending}
 
 
 @class_route(echarts_service, '/status')
@@ -58,8 +62,7 @@ class Status(GetView):
     NOW_STATUS = '暂无'
 
     def action(self):
-        status = db.session.query(Rs.status).group_by(Rs.status).all()
-        status = [_st.status for _st in status]
+        status = Rs.get_status()
 
         # 排除当前月份的
         if self.NOW_STATUS in status:
@@ -74,12 +77,8 @@ class UserSpendingByDate(GetView):
     serialize_class = LineDataSerialize
 
     @staticmethod
-    def _get_series_data(records) -> float:
-        return '%.2f' % sum([float(record.price)
-                             for record in records]) if records else 0
-
-    @staticmethod
     def _get_dates_by_status(status: str) -> List[str]:
+        """通过 status 得到 dates"""
         dates = db.session.query(
             func.date_format(
                 Rs.start_time,
@@ -89,14 +88,19 @@ class UserSpendingByDate(GetView):
         return [date.date for date in dates]
 
     @staticmethod
-    def _get_user_spending_by_date(user, dates, status):
+    def _get_user_spending_by_date(user, dates, status) -> List[float]:
+        """得到user每天的 spending"""
         user_spending_by_date = []
         for date in dates:
+            # 得到 user 当天 所有开支
             records = Rs.query.filter(Rs.status == status, Rs.people == user,
                                       Rs.start_time.like(f'{date}%')).order_by(
                                           Rs.start_time.desc()).all()
+
+            # 计算 user 当天总开支
             user_date_spending = '%.2f' % sum(
                 [float(record.price) for record in records]) if records else 0
+
             user_spending_by_date.append(user_date_spending)
         return user_spending_by_date
 
@@ -130,6 +134,7 @@ class SendEveryMouthUserSpending(GetView):
     SAVE_EXCEL_PATH = 'apps/front_end/static/data.xlsx'
 
     def _save_file(self):
+
         # TODO 没发现 api 暂时先保存下来、后面读取文件发送
         user_spending = db.session.query(
             Rs.title, Rs.people, Rs.price,

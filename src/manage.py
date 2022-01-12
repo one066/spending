@@ -1,7 +1,8 @@
 import click
 
 from apps.base import create_app
-from apps.spending.models import RecordSpending, User
+from apps.spending.models.record_spending import RecordSpending
+from apps.spending.models.user import User
 from extension.mysql_client import db
 
 app = create_app()
