@@ -23,7 +23,8 @@
                                    placeholder="价格">
                         </div>
                         <div class="form-group">
-                            <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block" value="添加">
+                            <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block"
+                                   value="添加">
                         </div>
 
                     </form>
@@ -67,11 +68,10 @@
                     },
                     crossDomain: true,
                     success: function (data) {
-                        if( !data.valueOf()['ok']) {
+                        if (!data.valueOf()['ok']) {
                             alert('添加失败：' + data.valueOf()['error_type'])
-                        }
-                        else {
-                            alert('添加成功\n '+ title + ':' + price);
+                        } else {
+                            alert('添加成功\n ' + title + ':' + price);
                             location.reload()
                         }
                     },
@@ -79,94 +79,75 @@
                         alert("添加失败！！");
                     }
                 })
+            }
         }
-    }
     </script>
     <script>
-        var chartDom = document.getElementById('echarts');
-        var myChart = echarts.init(chartDom);
-        var option;
-
-        option = {
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            top: '5%',
-            left: 'center'
-          },
-          series: [
-            {
-              name: 'Access From',
-              type: 'pie',
-              radius: ['40%', '70%'],
-              avoidLabelOverlap: false,
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: '#fff',
-                borderWidth: 2
-              },
-              label: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: '40',
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: false
-              },
-            }
-          ]
-        };
-        $.ajax({
+        function get_data() {
+            var data_list = [];
+            $.ajax({
                 url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=暂无",
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {
-                    myChart.setOption({
-                            series: [
-                                {
-                                  name: '开支情况',
-                                  type: 'pie',
-                                  radius: ['40%', '70%'],
-                                  avoidLabelOverlap: false,
-                                  itemStyle: {
-                                    borderRadius: 10,
-                                    borderColor: '#fff',
-                                    borderWidth: 2
-                                  },
-                                  label: {
-                                      show: false,
-                                      formatter:'{d}%'
-                                  },
-                                  emphasis: {
-                                    label: {
-                                      show: true,
-                                      fontSize: '40',
-                                      fontWeight: 'bold'
-                                    }
-                                  },
-                                  labelLine: {
-                                    show: false
-                                  },
-                                    data: result_data.valueOf()['data']
-                                }
-                              ]
-
-                        })
-
+                    var data = result_data.valueOf()['data']
+                    for (let i = 0; i < data.length; i++) {
+                        data_list[i] = {name: data[i]['people'], value: data[i]['value']}
+                    }
+                    option && myChart.setOption(option);
                 },
                 error: function (e) {
                     alert("失败！！");
                 }
             })
+            return data_list
+        }
 
+        var chartDom = document.getElementById('echarts');
+        var myChart = echarts.init(chartDom);
+        reslut_data =get_data()
+        var option;
+        option = {
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '开支情况',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        formatter: '{d}%'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: reslut_data,
+                }
+            ]
+
+        };
         option && myChart.setOption(option);
-
     </script>
 {% endblock %}
+
+
+

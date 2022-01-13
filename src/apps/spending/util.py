@@ -1,9 +1,8 @@
 from datetime import datetime
-from typing import Dict, List
+from typing import List
 
 from dateutil.relativedelta import relativedelta
-
-from apps.spending.models.record_spending import RecordSpending
+from sqlalchemy.engine import Row
 
 
 def get_now_mouth_title() -> str:
@@ -17,7 +16,7 @@ def get_now_mouth_title() -> str:
     return f'{last_time} to {now_time}'
 
 
-def build_every_mouth_body(record_spending: List[RecordSpending]) -> str:
+def build_every_mouth_body(record_spending: List[Row]) -> str:
     """
     构造每个人发送清单 body
     """

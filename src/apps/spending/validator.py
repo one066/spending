@@ -46,3 +46,4 @@ class LineDataSerialize(Schema):
     dates = fields.List(fields.Str)
     users = fields.List(fields.Str)
     series = fields.List(fields.Dict)
+    user_spending = fields.List(fields.List(fields.Str))
