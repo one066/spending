@@ -1,9 +1,10 @@
 import datetime
 import uuid
 
-from flask import Blueprint, jsonify
+from flask import Blueprint
 
-from apps.spending.models import RecordSpending, User
+from apps.spending.models.record_spending import RecordSpending
+from apps.spending.models.user import User
 from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
                                      LoginValidator)
 from extension.flask import class_route
