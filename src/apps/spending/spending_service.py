@@ -8,7 +8,6 @@ from apps.spending.models.user import User
 from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
                                      LoginValidator)
 from extension.flask import class_route
-from extension.flask.api import failed_response
 from extension.flask.exceptions import TokenFailed
 from extension.flask.views import PostView
 from extension.mysql_client import db
