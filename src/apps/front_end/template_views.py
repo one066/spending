@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for
 
-from extension.flask.api import v1
+from extension.flask.api import func_check_token_v1
 
 front_end_views = Blueprint('front_end_views',
                             __name__,
@@ -17,21 +17,21 @@ def login():
 
 
 @front_end_views.route('/home', methods=['GET'])
-@v1
+@func_check_token_v1
 def home():
 
     return render_template('home.html')
 
 
 @front_end_views.route('/show', methods=['GET'])
-@v1
+@func_check_token_v1
 def show():
 
     return render_template('show.html')
 
 
 @front_end_views.route('/history', methods=['GET'])
-@v1
+@func_check_token_v1
 def history():
 
     return render_template('history.html')

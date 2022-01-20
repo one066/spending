@@ -74,12 +74,12 @@ class APIBaseView(MethodView):
         return request.json or {}
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return request.cookies.get('name')
 
     def dispatch_request(self, *args, **kwargs):
         try:
-            return super(APIBaseView, self).dispatch_request(*args, **kwargs)
+            return super().dispatch_request(*args, **kwargs)
         except Exception as exception:
             return handle_exception(self.__class__.__name__, exception,
                                     **kwargs)
@@ -88,29 +88,44 @@ class APIBaseView(MethodView):
 def token_check():
     cookie = request.cookies
 
-    token = cookie.get('token', 'x')
-    name = cookie.get('name', 'y')
+    token = cookie.get('token')
+    name = cookie.get('name')
+
+    if not token or not name:
+        return False
+
     key = redis_client.get(name)
 
     if not key:
         return False
+
     if key.decode() != token:
         return False
 
     return True
 
 
-def v1(view):
+def view_check_token_v1(view):
     """
     view or func check
     """
     @wraps(view)
     def decorator(*args, **kwargs):
         if not token_check():
-            if isinstance(view, MethodViewType):
-                raise TokenFailed
-            else:
-                return redirect(url_for('front_end_views.login'))
+            raise TokenFailed
+        return view(*args, **kwargs)
+
+    return decorator
+
+
+def func_check_token_v1(view):
+    """
+    view or func check
+    """
+    @wraps(view)
+    def decorator(*args, **kwargs):
+        if not token_check():
+            return redirect(url_for('front_end_views.login'))
         return view(*args, **kwargs)
 
     return decorator

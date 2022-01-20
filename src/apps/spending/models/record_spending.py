@@ -37,10 +37,13 @@ class RecordSpending(db.Model):
             cls.start_time.desc()).all()
 
     @classmethod
-    def get_status(cls) -> List[str]:
+    def get_status(cls, remove_now_mouth: bool = False) -> List[str]:
         """得到所有 status"""
         status = db.session.query(cls.status).group_by(cls.status).all()
-        return [_st.status for _st in status]
+        status = [_st.status for _st in status]
+        if remove_now_mouth:
+            status.remove('暂无')
+        return status
 
     @classmethod
     def get_dates_by_status(cls, status: str) -> List[str]:
@@ -66,7 +69,20 @@ class RecordSpending(db.Model):
 
             # 计算 user 当天总开支
             user_date_spending = '%.2f' % sum(
-                [float(record.price) for record in records]) if records else 0
+                float(record.price) for record in records) if records else 0
 
             user_spending_by_date.append(user_date_spending)
         return user_spending_by_date
+
+    @classmethod
+    def get_now_mouth_users_spending(cls) -> List[Row]:
+        """得到当月用户开支"""
+        return db.session.query(cls.title, cls.people, cls.price,
+                                cls.start_time).filter_by(status='暂无').all()
+
+    @classmethod
+    def end_spending_for_the_mouth(cls, now_mouth_title) -> None:
+        """结束当月开支"""
+        cls.query.filter(cls.status == '暂无').update(
+            {'status': now_mouth_title})
+        db.session.commit()
