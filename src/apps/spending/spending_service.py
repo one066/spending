@@ -8,7 +8,7 @@ from apps.spending.models.user import User
 from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
                                      LoginValidator)
 from extension.flask import class_route
-from extension.flask.exceptions import TokenFailed
+from extension.flask.api import view_check_token_v1
 from extension.flask.views import PostView
 from extension.mysql_client import db
 from extension.redis_client import redis_client
@@ -50,11 +50,18 @@ class LoginCheck(PostView):
 class AddSpending(PostView):
     validated_class = AddSpendingValidator
 
+    @staticmethod
+    def _send_mail(name: str, title: str, price: float) -> None:
+        # 向成员发送消息
+        one_email = OneEmail()
+        one_email.add_message(subject="外滩405 开支",
+                              recipients=User.emails(),
+                              body=f'{name} 刚刚消费了\n {title} : {price}元')
+        one_email.send()
+
+    @view_check_token_v1
     def action(self, *args, **kwargs):
         name = self.get_name()
-        if not name:
-            raise TokenFailed
-
         title = self.validated_data['title']
         price = self.validated_data['price']
 
@@ -70,10 +77,5 @@ class AddSpending(PostView):
         db.session.add(_record_spending)
         db.session.commit()
 
-        # 向成员发送消息
-        one_email = OneEmail()
-        one_email.add_message(subject="外滩405 开支",
-                              recipients=User.emails(),
-                              body=f'{name} 刚刚消费了\n {title} : {price}元')
-        one_email.send()
+        self._send_mail(name, title, price)
         return

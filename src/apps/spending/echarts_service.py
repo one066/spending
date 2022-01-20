@@ -1,9 +1,5 @@
-from typing import List
-
 import pandas as pd
 from flask import Blueprint
-from sqlalchemy import func
-from sqlalchemy.engine import Row
 
 from apps.spending.models.record_spending import RecordSpending as Rs
 from apps.spending.models.user import User
@@ -14,7 +10,6 @@ from apps.spending.validator import (LineDataSerialize, PieValidator,
                                      StatusSerialize, StatusValidator)
 from extension.flask import class_route
 from extension.flask.views import GetView
-from extension.mysql_client import db
 from SDK.email import OneEmail
 
 echarts_service = Blueprint('echarts_service',
@@ -49,15 +44,8 @@ class SpendingGroupByUser(GetView):
 class Status(GetView):
     serialize_class = StatusSerialize
 
-    NOW_STATUS = '暂无'
-
     def action(self):
-        status = Rs.get_status()
-
-        # 排除当前月份的
-        if self.NOW_STATUS in status:
-            status.remove(self.NOW_STATUS)
-
+        status = Rs.get_status(remove_now_mouth=True)
         return {'status': status}
 
 
@@ -88,22 +76,15 @@ class SendEveryMouthUserSpending(GetView):
     SAVE_EXCEL_PATH = 'apps/front_end/static/data.xlsx'
 
     def _save_file(self):
-        # TODO 没发现 api 暂时先保存下来、后面读取文件发送
-        user_spending = db.session.query(
-            Rs.title, Rs.people, Rs.price,
-            Rs.start_time).filter_by(status='暂无').all()
+        user_spending = Rs.get_now_mouth_users_spending()
 
+        # TODO 没发现 api 暂时先保存下来、后面读取文件发送
         df = pd.DataFrame(user_spending,
                           columns=['title', 'name', 'price', 'start_time'])
         df.to_excel(self.SAVE_EXCEL_PATH, encoding='utf-8')
 
-    def action(self):
-        # 保存 excel
-        self._save_file()
-
-        # 发送邮件
+    def _send_mail(self, now_mouth_title):
         group_spending = Rs.get_spending_group_by_user('暂无')
-        now_mouth_title = get_now_mouth_title()
         every_mouth_body = build_every_mouth_body(group_spending)
 
         one_email = OneEmail()
@@ -115,7 +96,14 @@ class SendEveryMouthUserSpending(GetView):
                              file_path=self.SAVE_EXCEL_PATH)
         one_email.send()
 
+    def action(self):
+        # 保存 excel
+        self._save_file()
+
+        now_mouth_title = get_now_mouth_title()
+
+        # 发送邮件
+        self._send_mail(now_mouth_title)
         # 更新数据库
-        Rs.query.filter(Rs.status == '暂无').update({'status': now_mouth_title})
-        db.session.commit()
+        Rs.end_spending_for_the_mouth(now_mouth_title)
         return
