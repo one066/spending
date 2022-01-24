@@ -3,6 +3,9 @@ from typing import List, Optional
 from flask_mail import Mail, Message
 
 from extension.mail_client import mail
+from extension.project_config import get_config
+
+sender = get_config().MAIL_USERNAME
 
 
 class OneEmail:
@@ -16,7 +19,7 @@ class OneEmail:
     def add_message(self, subject: str, recipients: List[str],
                     body: str) -> None:
         self.message = Message(subject,
-                               sender='2531210067@qq.com',
+                               sender=sender,
                                recipients=recipients,
                                body=body,
                                charset='gbk')
