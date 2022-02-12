@@ -23,8 +23,7 @@ def build_every_mouth_body(record_spending: List[Row]) -> str:
     # TODO 兼容手机和电脑 使用了 \n 和 <br> 换行
     body = '本月开支表在附件里，分析情况请前去网页查看 \n<br>'
 
-    total_spending = sum(
-        [float(spending.value) for spending in record_spending])
+    total_spending = sum(float(spending.value) for spending in record_spending)
     body += f'总开支: {total_spending} \n<br>'
 
     average_spending = total_spending / len(record_spending)
@@ -33,5 +32,5 @@ def build_every_mouth_body(record_spending: List[Row]) -> str:
     # 计算盈余
     for spending in record_spending:
         body += f'{spending.people} 开支: {spending.value}   '
-        body += f'收入:{"%.2f" % (float(spending.people) - average_spending)} \n<br>'
+        body += f'收入:{"%.2f" % (float(spending.value) - average_spending)} \n<br>'
     return body
