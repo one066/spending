@@ -90,11 +90,11 @@
             };
         }
 
-
+        var status = $.getUrlParam('status');
         function get_spending_group_by_user() {
             var data_list = []
             $.ajax({
-                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=暂无",
+                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=" + status,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (result_data) {
