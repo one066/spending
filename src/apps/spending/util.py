@@ -32,5 +32,5 @@ def build_every_mouth_body(record_spending: List[Row]) -> str:
     # 计算盈余
     for spending in record_spending:
         body += f'{spending.people} 开支: {spending.value}   '
-        body += f'收入:{"%.2f" % (float(spending.value) - average_spending)} \n<br>'
+        body += f'收入: {"%.2f" % (float(spending.value) - average_spending)} \n<br>'
     return body
