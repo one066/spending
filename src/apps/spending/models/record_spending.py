@@ -41,7 +41,7 @@ class RecordSpending(db.Model):
         """得到所有 status"""
         status = db.session.query(cls.status).group_by(cls.status).all()
         status = [_st.status for _st in status]
-        if remove_now_mouth:
+        if remove_now_mouth and '暂无' in status:
             status.remove('暂无')
         return status
 
