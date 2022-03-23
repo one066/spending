@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 
 
-class BaseConfig(object):
+class BaseConfig:
     # INIT
     SECRET_KEY = os.urandom(24)
     DEBUG = True
@@ -29,7 +29,7 @@ class BaseConfig(object):
     ]
 
     # dbConfig
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456hk@127.0.0.1:3306/spending?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@mysql:3306/spending?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_POOL_RECYCLE = 800
 
@@ -40,5 +40,5 @@ class BaseConfig(object):
     MAIL_USE_TLS = False
     MAIL_DEBUG = True
     MAIL_USERNAME = '2531210067@qq.com'
-    MAIL_PASSWORD = 'whynsqohaezzdjdh'
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_ASCII_ATTACHMENTS = True
