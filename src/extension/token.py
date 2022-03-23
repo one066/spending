@@ -24,9 +24,7 @@ class Token:
         # 如果没有新建一个
         if not _token:
             _token = generate_token()
-            redis_client.set(
-                self.USER_TOKEN_KEY.format(name=name), _token
-            )
+            redis_client.set(self.USER_TOKEN_KEY.format(name=name), _token)
         return _token
 
     def check(self, name: str, token: str) -> bool:

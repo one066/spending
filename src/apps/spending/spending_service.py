@@ -14,9 +14,8 @@ from extension.flask import class_route
 from extension.flask.api import view_check_token_v1
 from extension.flask.views import PostView
 from extension.mysql_client import db
-from SDK.email import OneEmail
-from extension.project_config import get_config
 from extension.token import Token
+from SDK.email import OneEmail
 
 spending_service = Blueprint(
     'spending_service', __name__, url_prefix='/v1/service'
