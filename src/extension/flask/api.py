@@ -96,7 +96,7 @@ def token_check():
     if not token or not name:
         return False
 
-    key = redis_client.get(name)
+    key = redis_client.get(f"spending:{name}")
 
     if not key:
         return False

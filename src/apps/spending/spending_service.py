@@ -33,13 +33,13 @@ class LoginCheck(PostView):
         user = User.query.filter_by(name=name).first()
 
         if user.login(password):
-            token = redis_client.get(name)
+            token = redis_client.get(f"spending:{name}")
 
             if token:
                 token = token.decode()
             else:
                 token = uuid.uuid4().hex
-                redis_client.set(name, token)
+                redis_client.set(f"spending:{name}", token)
 
             return {
                 'login': True,
