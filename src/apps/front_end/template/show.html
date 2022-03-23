@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% block title %} one - add-spending {% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/dataTables.bootstrap4.min.css') }}>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card col-lg-12">
+                <div class="header">
+                    <h1 class="h4 text-gray-900 mb-4">开支流水</h1>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table mb-0" id="dataTable">
+                            <thead>
+                            <tr>
+                                <th>who</th>
+                                <th>title</th>
+                                <th>price</th>
+                                <th>start_time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>折线图</h2>
+                </div>
+                <div class="body">
+                    <div id="echarts_line" style="width: 400px;height:300px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>饼图</h2>
+                </div>
+                <div class="body">
+                    <div id="echarts_pie" style="width: 400px;height:300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block custom_js %}
+    <script src="{{ url_for('front_end_views.static',filename='js/echarts.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('front_end_views.static',filename='js/dataTables.bootstrap4.min.js') }}"></script>
+    <script>
+
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return '暂无';
+            }
+        })(jQuery);
+
+    </script>
+    <script>
+        var status = $.getUrlParam('status');
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "ajax": "{{ url_for('echarts_service.ShowSpending') }}?status=" + status
+            });
+        });
+    </script>
+    <script>
+        function refresh() {
+            window.onresize = function () {
+                for (var i = 0; i < charts.length; i++) {
+                    charts[i].resize();
+                }
+            };
+        }
+
+        var status = $.getUrlParam('status');
+        function get_spending_group_by_user() {
+            var data_list = []
+            $.ajax({
+                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=" + status,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (result_data) {
+                    var data = result_data.valueOf()['data']
+                    for (let i = 0; i < data.length; i++) {
+                        data_list[i] = {name: data[i]['people'], value: data[i]['value']}
+                    }
+                    myChart1.setOption(option1);
+                },
+                error: function (e) {
+                    alert("失败！！");
+                }
+            })
+            return data_list
+        }
+
+        function get_user_spending_by_date() {
+            var return_data = {};
+            $.ajax({
+                url: "{{ url_for('echarts_service.UserSpendingByDate') }}?status=" + status,
+                type: 'GET',
+                async: false,
+                contentType: 'application/json',
+                success: function (result_data_1) {
+                    var data = result_data_1.valueOf();
+                    return_data['users'] = data['users'];
+                    return_data['dates'] = data['dates'];
+                    return_data['series'] = [];
+                    for (let i = 0; i < result_data_1['user_spending'].length; i++) {
+                        return_data['series'][i] = {
+                            type: 'line',
+                            stack: 'Total',
+                            name: data['users'][i],
+                            data: result_data_1['user_spending'][i]
+                        }
+                    }
+                    {#console.log(reslut_data_2)#}
+                    option2 && myChart2.setOption(option2);
+                },
+                error: function (e) {
+                    alert("失败！！");
+                }
+            })
+            return return_data
+        }
+
+        var status = $.getUrlParam('status');
+        var chartPie = document.getElementById('echarts_pie');
+        var chartLine = document.getElementById('echarts_line');
+        var charts = [];
+
+        reslut_data_1 = get_spending_group_by_user()
+        reslut_data_2 = get_user_spending_by_date()
+
+        var myChart1 = echarts.init(chartPie);
+        var option1;
+        option1 = {
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '开支情况',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        formatter: '{d}%'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: reslut_data_1,
+                }
+            ]
+        };
+
+        myChart1.setOption(option1);
+        charts.push(myChart1)
+
+        var myChart2 = echarts.init(chartLine);
+        var option2;
+        option2 = {
+            title: {
+                text: 'Stacked Line'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: reslut_data_2['users']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: reslut_data_2['dates']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: reslut_data_2['series']
+        };
+        option2 && myChart2.setOption(option2);
+        charts.push(myChart2)
+        refresh()
+    </script>
+{% endblock %}

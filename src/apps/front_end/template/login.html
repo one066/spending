@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>one - login</title>
+
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/icons.css') }}>
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/font.min.css') }}>
+    <link rel="stylesheet" href={{ url_for('front_end_views.static',filename='css/theme.css') }}>
+
+</head>
+
+<body class="theme-indigo">
+
+<div id="wrapper">
+    <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+            <div class="auth-box">
+                <div class="card">
+                    <div class="header">
+                        <p class="lead">登录你的账号</p>
+                    </div>
+                    <div class="body">
+                        <form class="form-auth-small" onSubmit="return false;">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-user" id="name"
+                                       name="name"
+                                       placeholder="用户名">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user" id="password"
+                                       name="password"
+                                       placeholder="密码">
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" onclick="checklogin()" class="btn btn-primary btn-lg btn-block"
+                                       value="login">
+                            </div>
+                            <div class="bottom">
+                                    <span class="helper-text m-b-10"><i class="fa fa-lock"></i>
+                                        <a href="#">忘记密码?</a></span>
+                                <span>没有账号? <a href="#">注册</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer class="sticky-footer">
+        <div class="my-auto" style="position: fixed;bottom: 0;left: 45%;">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; one 2022   蜀ICP备2021027913号</span>
+            </div>
+        </div>
+    </footer>
+<script src="{{ url_for('front_end_views.static',filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('front_end_views.static',filename='js/theme.js') }}"></script>
+<script src="{{ url_for('front_end_views.static',filename='js/libscripts.bundle.js') }}"></script>
+<script src="{{ url_for('front_end_views.static',filename='js/vendorscripts.bundle.js') }}"></script>
+<script src="{{ url_for('front_end_views.static',filename='js/jquery.cookie-1.4.1.min.js') }}"></script>
+
+<script>
+    function checklogin() {
+        var pw = $('#password').val();
+        var name = $('#name').val();
+        if (!pw || !name) {
+            alert('密码、用户名不能为空')
+        } else if (pw.length < 3) {
+            alert('密码不能低于3位')
+        } else {
+            var Obj = {'password': pw, 'name': name};
+            $.ajax({
+                url: "{{ url_for('spending_service.LoginCheck') }}",
+                type: 'POST',
+                data: JSON.stringify(Obj),
+                contentType: 'application/json',
+                success: function (data) {
+                    if (!data.valueOf()['result']['login']) {
+                        alert("密码错误！！");
+                    } else {
+                        $.cookie("name", null, {expires: -1});
+                        $.cookie("token", null, {expires: -1});
+
+                        console.log(data.valueOf()['result']['name']);
+                        $.cookie('name', data.valueOf()['result']['name'], {path: '/'});
+                        $.cookie('token', data.valueOf()['result']['token'], {path: '/'});
+                        window.location.href = "{{ url_for('front_end_views.home') }}";
+                    }
+                },
+                error: function (e) {
+                    alert("密码错误！！");
+                }
+            })
+        }
+    }
+</script>
+</body>
+</html>

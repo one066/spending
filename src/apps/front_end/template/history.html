@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} one - history - spending {% endblock %}
+
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h1 class="h4 text-gray-900 mb-4">历史记录</h1>
+                </div>
+                <div class="body" id="history">
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block custom_js %}
+    <script>
+        var history = document.getElementById("history");
+        $(document).ready(function() {
+            $.ajax({
+            url: "{{ url_for('echarts_service.Status') }}",
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                for (var i=0; i<data['status'].length; i++){
+                    $("#history").append("<a href='{{ url_for('front_end_views.show') }}?status="
+                        +data['status'][i] +"'><button class='btn btn-success'>"
+                        + data['status'][i] + "</button></a></br></br>")
+                }
+            },
+            error: function (e) {
+                alert("查询失败！！");
+            }
+        })
+        })
+    </script>
+
+{% endblock %}

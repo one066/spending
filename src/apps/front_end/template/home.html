@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %} one - add-spending {% endblock %}
+
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h1 class="h4 text-gray-900 mb-4">添加开支</h1>
+                </div>
+                <div class="body">
+                    <form class="user" onSubmit="return false;">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-user" id="title"
+                                   name="title"
+                                   placeholder="描述">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-user" id="price"
+                                   name="price"
+                                   placeholder="价格">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" onclick="checklogin()" class="btn btn-primary btn-user btn-block"
+                                   value="添加">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>开支分布</h2>
+                </div>
+                <div class="body">
+                    <div id="echarts" style="width: 400px;height:300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block custom_js %}
+    <script src="{{ url_for('front_end_views.static',filename='js/echarts.min.js') }}"></script>
+    <script>
+        function checklogin() {
+            var price = $('#price').val();
+            var title = $('#title').val();
+            $('#price').val("");
+            $('#title').val("");
+            if (!price || !title) {
+                alert('信息不能为空')
+            } else {
+                var Obj = {'price': price, 'title': title};
+                console.log(Obj)
+                $.ajax({
+                    url: "{{ url_for('spending_service.AddSpending') }}",
+                    type: 'POST',
+                    data: JSON.stringify(Obj),
+                    contentType: 'application/json',
+                    xhrFields: {
+                        withCredentials: true //允许跨域带Cookie
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        if (!data.valueOf()['ok']) {
+                            alert('添加失败：' + data.valueOf()['error_type'])
+                        } else {
+                            alert('添加成功\n ' + title + ':' + price);
+                            location.reload()
+                        }
+                    },
+                    error: function (e) {
+                        alert("添加失败！！");
+                    }
+                })
+            }
+        }
+    </script>
+    <script>
+        function get_data() {
+            var data_list = [];
+            $.ajax({
+                url: "{{ url_for('echarts_service.SpendingGroupByUser') }}?status=暂无",
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (result_data) {
+                    var data = result_data.valueOf()['data']
+                    for (let i = 0; i < data.length; i++) {
+                        data_list[i] = {name: data[i]['people'], value: data[i]['value']}
+                    }
+                    option && myChart.setOption(option);
+                },
+                error: function (e) {
+                    alert("失败！！");
+                }
+            })
+            return data_list
+        }
+
+        var chartDom = document.getElementById('echarts');
+        var myChart = echarts.init(chartDom);
+        reslut_data =get_data()
+        var option;
+        option = {
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '开支情况',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        formatter: '{d}%'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: reslut_data,
+                }
+            ]
+
+        };
+        option && myChart.setOption(option);
+    </script>
+{% endblock %}
