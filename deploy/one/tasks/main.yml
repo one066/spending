@@ -4,6 +4,7 @@
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: down_info
+  ignore_errors: yes
 - debug: var=down_info.stdout verbosity=0
 
 - name: docker-compose rmi
@@ -11,6 +12,7 @@
   args:
     chdir: /usr/web/deploy/{{ project }}
   register: rmi_info
+  ignore_errors: yes
 - debug: var=rmi_info.stdout verbosity=0
 
 - name: docker-compose up
