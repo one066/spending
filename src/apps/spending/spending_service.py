@@ -14,8 +14,9 @@ from extension.flask import class_route
 from extension.flask.api import view_check_token_v1
 from extension.flask.views import PostView
 from extension.mysql_client import db
-from extension.redis_client import redis_client
 from SDK.email import OneEmail
+from extension.project_config import get_config
+from extension.token import Token
 
 spending_service = Blueprint(
     'spending_service', __name__, url_prefix='/v1/service'
@@ -33,17 +34,13 @@ class LoginCheck(PostView):
         user = User.query.filter_by(name=name).first()
 
         if user.login(password):
-            token = redis_client.get(f"spending:{name}")
 
-            if token:
-                token = token.decode()
-            else:
-                token = uuid.uuid4().hex
-                redis_client.set(f"spending:{name}", token)
+            token = Token()
+            _token = token.get(name)
 
             return {
                 'login': True,
-                'token': token,
+                'token': _token,
                 'name': name,
             }
         return {'login': False}
