@@ -45,6 +45,7 @@ class BaseView(APIBaseView):
 
 
 class GetView(BaseView):
+
     def get(self, *args, **kwargs):
         return super().method(args, kwargs)
 
@@ -76,20 +77,24 @@ class GetView(BaseView):
 
 
 class PostView(BaseView):
+
     def post(self, *args, **kwargs):
         return super().method(args, kwargs)
 
 
 class PutView(BaseView):
+
     def put(self, *args, **kwargs):
         return super().method(args, kwargs)
 
 
 class DeleteView(BaseView):
+
     def delete(self, *args, **kwargs):
         return super().method(args, kwargs)
 
 
 class PatchView(BaseView):
+
     def patch(self, *args, **kwargs):
         return super().method(args, kwargs)

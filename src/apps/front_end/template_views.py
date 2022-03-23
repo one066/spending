@@ -2,12 +2,14 @@ from flask import Blueprint, redirect, render_template, url_for
 
 from extension.flask.api import func_check_token_v1
 
-front_end_views = Blueprint('front_end_views',
-                            __name__,
-                            url_prefix='/spending',
-                            template_folder='template',
-                            static_url_path='',
-                            static_folder='static')
+front_end_views = Blueprint(
+    'front_end_views',
+    __name__,
+    url_prefix='/spending',
+    template_folder='template',
+    static_url_path='',
+    static_folder='static'
+)
 
 
 @front_end_views.route('/login', methods=['GET'])

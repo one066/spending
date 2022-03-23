@@ -11,8 +11,9 @@ class APIException(Exception):
             self.error_message = error_message
 
     def __repr__(self):
-        return '<{} {}: {}>'.format(self.__class__, self.error_type,
-                                    self.error_message)
+        return '<{} {}: {}>'.format(
+            self.__class__, self.error_type, self.error_message
+        )
 
 
 class TokenFailed(APIException):

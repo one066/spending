@@ -4,17 +4,21 @@ from flask import Blueprint
 from apps.spending.models.record_spending import RecordSpending as Rs
 from apps.spending.models.user import User
 from apps.spending.util import build_every_mouth_body, get_now_mouth_title
-from apps.spending.validator import (LineDataSerialize, PieValidator,
-                                     ShowSpendingSerialize,
-                                     SpendingGroupByUserSerialize,
-                                     StatusSerialize, StatusValidator)
+from apps.spending.validator import (
+    LineDataSerialize,
+    PieValidator,
+    ShowSpendingSerialize,
+    SpendingGroupByUserSerialize,
+    StatusSerialize,
+    StatusValidator,
+)
 from extension.flask import class_route
 from extension.flask.views import GetView
 from SDK.email import OneEmail
 
-echarts_service = Blueprint('echarts_service',
-                            __name__,
-                            url_prefix='/v1/service')
+echarts_service = Blueprint(
+    'echarts_service', __name__, url_prefix='/v1/service'
+)
 
 
 @class_route(echarts_service, '/show_spending')
@@ -35,7 +39,8 @@ class SpendingGroupByUser(GetView):
 
     def action(self, *arg, **kwargs):
         group_spending = Rs.get_spending_group_by_user(
-            self.validated_data['status'])
+            self.validated_data['status']
+        )
 
         return {'data': group_spending}
 
@@ -79,8 +84,9 @@ class SendEveryMouthUserSpending(GetView):
         user_spending = Rs.get_now_mouth_users_spending()
 
         # TODO 没发现 api 暂时先保存下来、后面读取文件发送
-        df = pd.DataFrame(user_spending,
-                          columns=['title', 'name', 'price', 'start_time'])
+        df = pd.DataFrame(
+            user_spending, columns=['title', 'name', 'price', 'start_time']
+        )
         df.to_excel(self.SAVE_EXCEL_PATH, encoding='utf-8')
 
     def _send_mail(self, now_mouth_title):
@@ -88,12 +94,16 @@ class SendEveryMouthUserSpending(GetView):
         every_mouth_body = build_every_mouth_body(group_spending)
 
         one_email = OneEmail()
-        one_email.add_message(subject=f"外滩405 {now_mouth_title} 开支",
-                              recipients=User.emails(),
-                              body=every_mouth_body)
-        one_email.add_attach(filename=f"外滩405 {now_mouth_title} 开支.xlsx",
-                             content_type='application/octet-stream',
-                             file_path=self.SAVE_EXCEL_PATH)
+        one_email.add_message(
+            subject=f"外滩405 {now_mouth_title} 开支",
+            recipients=User.emails(),
+            body=every_mouth_body
+        )
+        one_email.add_attach(
+            filename=f"外滩405 {now_mouth_title} 开支.xlsx",
+            content_type='application/octet-stream',
+            file_path=self.SAVE_EXCEL_PATH
+        )
         one_email.send()
 
     def action(self):

@@ -5,8 +5,11 @@ from flask import Blueprint
 
 from apps.spending.models.record_spending import RecordSpending
 from apps.spending.models.user import User
-from apps.spending.validator import (AddSpendingValidator, LoginSerialize,
-                                     LoginValidator)
+from apps.spending.validator import (
+    AddSpendingValidator,
+    LoginSerialize,
+    LoginValidator,
+)
 from extension.flask import class_route
 from extension.flask.api import view_check_token_v1
 from extension.flask.views import PostView
@@ -14,9 +17,9 @@ from extension.mysql_client import db
 from extension.redis_client import redis_client
 from SDK.email import OneEmail
 
-spending_service = Blueprint('spending_service',
-                             __name__,
-                             url_prefix='/v1/service')
+spending_service = Blueprint(
+    'spending_service', __name__, url_prefix='/v1/service'
+)
 
 
 @class_route(spending_service, '/login_check')
@@ -54,9 +57,11 @@ class AddSpending(PostView):
     def _send_mail(name: str, title: str, price: float) -> None:
         # 向成员发送消息
         one_email = OneEmail()
-        one_email.add_message(subject="外滩405 开支",
-                              recipients=User.emails(),
-                              body=f'{name} 刚刚消费了\n {title} : {price}元')
+        one_email.add_message(
+            subject="外滩405 开支",
+            recipients=User.emails(),
+            body=f'{name} 刚刚消费了\n {title} : {price}元'
+        )
         one_email.send()
 
     @view_check_token_v1
@@ -72,7 +77,8 @@ class AddSpending(PostView):
             title=title,
             price=price,
             people=name,
-            status='暂无')
+            status='暂无'
+        )
 
         db.session.add(_record_spending)
         db.session.commit()

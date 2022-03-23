@@ -25,16 +25,16 @@ def failed_response(error_type, error_message):
 def class_route(blueprint: Blueprint, rule, **options):
     """class view 的路由
     """
+
     def decorator(view):
         if isinstance(view, MethodViewType):
             view_func = view.as_view(view.__name__)
         else:
             view_func = view
 
-        blueprint.add_url_rule(rule,
-                               view.__name__,
-                               view_func=view_func,
-                               **options)
+        blueprint.add_url_rule(
+            rule, view.__name__, view_func=view_func, **options
+        )
         return view
 
     return decorator
@@ -50,8 +50,8 @@ def handle_exception(view_name, exception, **kwargs):
             error_type='ValidationError',
             error_message=exception.messages,
         )
-    elif hasattr(exception, 'error_type') and hasattr(exception,
-                                                      'error_message'):
+    elif hasattr(exception,
+                 'error_type') and hasattr(exception, 'error_message'):
         return failed_response(
             error_type=exception.error_type,
             error_message=exception.error_message,
@@ -63,6 +63,7 @@ def handle_exception(view_name, exception, **kwargs):
 class APIBaseView(MethodView):
     """扩展 class based view, 增加异常处理
     """
+
     @property
     def user_id(self):
         return request.headers.get('x-authenticated-userid', None)
@@ -81,8 +82,9 @@ class APIBaseView(MethodView):
         try:
             return super().dispatch_request(*args, **kwargs)
         except Exception as exception:
-            return handle_exception(self.__class__.__name__, exception,
-                                    **kwargs)
+            return handle_exception(
+                self.__class__.__name__, exception, **kwargs
+            )
 
 
 def token_check():
@@ -109,6 +111,7 @@ def view_check_token_v1(view):
     """
     view or func check
     """
+
     @wraps(view)
     def decorator(*args, **kwargs):
         if not token_check():
@@ -122,6 +125,7 @@ def func_check_token_v1(view):
     """
     view or func check
     """
+
     @wraps(view)
     def decorator(*args, **kwargs):
         if not token_check():
