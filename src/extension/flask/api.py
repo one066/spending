@@ -6,6 +6,7 @@ from marshmallow import ValidationError
 
 from extension.flask.exceptions import TokenFailed
 from extension.redis_client import redis_client
+from extension.token import Token
 
 
 def ok_response(result):
@@ -90,21 +91,14 @@ class APIBaseView(MethodView):
 def token_check():
     cookie = request.cookies
 
-    token = cookie.get('token')
+    _token = cookie.get('token')
     name = cookie.get('name')
 
-    if not token or not name:
+    if not _token or not name:
         return False
 
-    key = redis_client.get(name)
-
-    if not key:
-        return False
-
-    if key.decode() != token:
-        return False
-
-    return True
+    token = Token()
+    return token.check(name, _token)
 
 
 def view_check_token_v1(view):
