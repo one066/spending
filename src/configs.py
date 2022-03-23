@@ -10,6 +10,7 @@ class Development(BaseConfig):
     SEND_EVERY_MOUTH_USER_SPENDING_URL = 'HTTP://127.0.0.1:5000/v1/service/send_every_mouth_user_spending'
 
     REDIS_HOST = 'redis'
+    REDIS_PASSWORD = ''
 
 
 class Production(BaseConfig):
