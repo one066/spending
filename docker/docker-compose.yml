@@ -2,7 +2,7 @@ version: "3.3"
 services:
   spending:
     restart: always
-    image: 47.97.254.68:5000/spending:latest
+    image: spending:latest
     build: ../
     volumes:
       - ../src:/app
@@ -10,7 +10,11 @@ services:
       - redis
       - mysql
     environment:
-      STAGE: production
+      STAGE: development
+#      qq 邮箱配置
+#      MAIL_USERNAME: xxx
+#      MAIL_PASSWORD: xxx
+
 
   redis:
     image: redis:alpine

@@ -21,3 +21,20 @@ class User(db.Model):
     @classmethod
     def names(cls) -> List[str]:
         return [user.name for user in cls.query.all()]
+
+    @classmethod
+    def add_user(
+        cls, user_id: str, name: str, password: str, email: str
+    ) -> None:
+        db.session.add(
+            cls(id=user_id, name=name, password=password, email=email)
+        )
+        db.session.commit()
+
+    @classmethod
+    def show_users(cls) -> list:
+        return [{
+            "name": user.name,
+            "password": user.password,
+            "email": user.email
+        } for user in cls.query.all()]
