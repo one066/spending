@@ -20,9 +20,9 @@ class BaseConfig:
             'args': '',
             'trigger': {
                 'type': 'cron',
-                'day': '11',
+                'day': '10',
                 'hour': '20',
-                'minute': '5',
+                'minute': '1',
                 'second': '20'
             }
         },
@@ -39,6 +39,6 @@ class BaseConfig:
     MAIL_USE_SSL = True
     MAIL_USE_TLS = False
     MAIL_DEBUG = True
-    MAIL_USERNAME = '2531210067@qq.com'
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_ASCII_ATTACHMENTS = True
