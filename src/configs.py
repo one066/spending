@@ -18,7 +18,7 @@ class Production(BaseConfig):
     STAGE = 'production'
 
     # 服务端 激活定时任务api
-    SEND_EVERY_MOUTH_USER_SPENDING_URL = 'https://kkone.top/v1/service/send_every_mouth_user_spending'
+    SEND_EVERY_MOUTH_USER_SPENDING_URL = 'http://127.0.0.1:8008/v1/service/send_every_mouth_user_spending'
 
     REDIS_HOST = os.environ.get("REDIS_HOST")
     REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
